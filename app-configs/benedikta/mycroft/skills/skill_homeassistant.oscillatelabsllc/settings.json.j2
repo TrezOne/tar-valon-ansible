@@ -1,0 +1,8 @@
+{% set vault_addr = 'https://vault.trez.wtf' %}
+{% set secrets_path = 'benedikta-config/env' %}
+
+{
+    "api_key": "{{ lookup('community.hashi_vault.vault_kv2_get', 'env', engine_mount_point='benedikta-config', url=vault_addr, token=vault_token_cleaned)['secret']['HOME_ASSISTANT_LONG_LIVED_TOKEN'] }}",
+    "host": "192.168.1.250:8123",
+    "__mycroft_skill_firstrun": false
+}

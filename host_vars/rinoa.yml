@@ -1,0 +1,3 @@
+appdata_base_path: /home/charish/.docker/config/appdata
+secrets_path: rinoa-docker/env
+vault_token_cleaned: "{{ lookup('env','VAULT_TOKEN') }}"
