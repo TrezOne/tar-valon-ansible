@@ -5,9 +5,9 @@ collections/*
 !collections/ansible_collections
 !collections/requirements.yml
 collections/ansible_collections/*
-!collections/ansible_collections/aperature_ansible
-collections/ansible_collections/aperature_ansible/*
-!collections/ansible_collections/aperature_ansible/aperature
+!collections/ansible_collections/tar-valon_ansible
+collections/ansible_collections/tar-valon_ansible/*
+!collections/ansible_collections/tar-valon_ansible/tar-valon
 # https://raw.githubusercontent.com/github/gitignore/main/Python.gitignore
 # Byte-compiled / optimized / DLL files
 __pycache__/
