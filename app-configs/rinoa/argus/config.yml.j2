@@ -10,7 +10,7 @@ settings:
     route_prefix: /
     basic_auth:
       username: 'admin'
-      password: "{{ lookup('community.hashi_vault.vault_kv2_get', 'env', engine_mount_point='rinoa-docker', url=vault_addr, token=vault_token_cleaned)['secret']['ARGUS_WEB_PASSWORD'] }}"
+      password: "{{ lookup('community.hashi_vault.vault_kv2_get', 'env', engine_mount_point='rinoa-docker', url=vault_addr, token=vault_token)['secret']['ARGUS_WEB_PASSWORD'] }}"
   disabled_routes: []
   favicon:
     png: ''
@@ -20,7 +20,7 @@ notify:
     type: gotify
     url_fields:
       Host: gotify
-      Token: {{ lookup('community.hashi_vault.vault_kv2_get', 'env', engine_mount_point='rinoa-docker', url=vault_addr, token=vault_token_cleaned)['secret']['ARGUS_WEB_PASSWORD'] }}
+      Token: {{ lookup('community.hashi_vault.vault_kv2_get', 'env', engine_mount_point='rinoa-docker', url=vault_addr, token=vault_token)['secret']['ARGUS_WEB_PASSWORD'] }}
     params:
       Title: Argus @ Rinoa
 service:
@@ -35,7 +35,7 @@ service:
       url: "https://adguard.trez.wtf/control/status"
       basic_auth:
         username: admin
-        password: {{ lookup('community.hashi_vault.vault_kv2_get', 'env', engine_mount_point='rinoa-docker', url=vault_addr, token=vault_token_cleaned)['secret']['ADGUARD_PASSWORD'] }}
+        password: {{ lookup('community.hashi_vault.vault_kv2_get', 'env', engine_mount_point='rinoa-docker', url=vault_addr, token=vault_token)['secret']['ADGUARD_PASSWORD'] }}
       json: version
       regex: v([0-9.]+)
     dashboard:
@@ -154,7 +154,7 @@ service:
       regex: ^v([0-9.]+)$
       headers:
         - key: x-api-key
-          value: {{ lookup('community.hashi_vault.vault_kv2_get', 'env', engine_mount_point='rinoa-docker', url=vault_addr, token=vault_token_cleaned)['secret']['IMMICH_POWER_TOOLS_KEY'] }}
+          value: {{ lookup('community.hashi_vault.vault_kv2_get', 'env', engine_mount_point='rinoa-docker', url=vault_addr, token=vault_token)['secret']['IMMICH_POWER_TOOLS_KEY'] }}
     dashboard:
       icon: "https://raw.githubusercontent.com/immich-app/immich/main/web/static/immich-logo.svg"
       web_url: "https://github.com/immich-app/immich/releases/tag/v{% raw %}{{ version }}{% endraw %}"
@@ -198,7 +198,7 @@ service:
       url: "https://lidarr.trez.wtf/api/v1/system/status"
       headers:
         - key: X-Api-Key
-          value: {{ lookup('community.hashi_vault.vault_kv2_get', 'env', engine_mount_point='rinoa-docker', url=vault_addr, token=vault_token_cleaned)['secret']['LIDARR_API_KEY'] }}
+          value: {{ lookup('community.hashi_vault.vault_kv2_get', 'env', engine_mount_point='rinoa-docker', url=vault_addr, token=vault_token)['secret']['LIDARR_API_KEY'] }}
       json: version
     dashboard:
       icon: "https://raw.githubusercontent.com/Lidarr/Lidarr/develop/Logo/1024.png"
@@ -224,7 +224,7 @@ service:
       url: "https://bazarr.trez.wtf/api/system/status"
       headers:
         - key: X-API-KEY
-          value: {{ lookup('community.hashi_vault.vault_kv2_get', 'env', engine_mount_point='rinoa-docker', url=vault_addr, token=vault_token_cleaned)['secret']['BAZARR_API_KEY'] }}
+          value: {{ lookup('community.hashi_vault.vault_kv2_get', 'env', engine_mount_point='rinoa-docker', url=vault_addr, token=vault_token)['secret']['BAZARR_API_KEY'] }}
       json: data.bazarr_version
     dashboard:
       web_url: "https://github.com/morpheus65535/bazarr/releases/v{% raw %}{{ version }}{% endraw %}"
@@ -266,7 +266,7 @@ service:
       url: "https://prowlarr.trez.wtf/api/v1/system/status"
       headers:
         - key: X-Api-Key
-          value: {{ lookup('community.hashi_vault.vault_kv2_get', 'env', engine_mount_point='rinoa-docker', url=vault_addr, token=vault_token_cleaned)['secret']['PROWLARR_API_KEY'] }}
+          value: {{ lookup('community.hashi_vault.vault_kv2_get', 'env', engine_mount_point='rinoa-docker', url=vault_addr, token=vault_token)['secret']['PROWLARR_API_KEY'] }}
       json: version
     dashboard:
       web_url: "https://github.com/Prowlarr/Prowlarr/releases/v{% raw %}{{ version }}{% endraw %}"
@@ -284,7 +284,7 @@ service:
       url: "https://radarr.trez.wtf/api/v3/system/status"
       headers:
         - key: X-Api-Key
-          value: {{ lookup('community.hashi_vault.vault_kv2_get', 'env', engine_mount_point='rinoa-docker', url=vault_addr, token=vault_token_cleaned)['secret']['RADARR_API_KEY'] }}
+          value: {{ lookup('community.hashi_vault.vault_kv2_get', 'env', engine_mount_point='rinoa-docker', url=vault_addr, token=vault_token)['secret']['RADARR_API_KEY'] }}
       json: version
     dashboard:
       web_url: "https://github.com/Radarr/Radarr/releases/v{% raw %}{{ version }}{% endraw %}"
@@ -304,7 +304,7 @@ service:
       url: "https://readarr.trez.wtf/api/v1/system/status"
       headers:
         - key: X-Api-Key
-          value: {{ lookup('community.hashi_vault.vault_kv2_get', 'env', engine_mount_point='rinoa-docker', url=vault_addr, token=vault_token_cleaned)['secret']['READARR_API_KEY'] }}
+          value: {{ lookup('community.hashi_vault.vault_kv2_get', 'env', engine_mount_point='rinoa-docker', url=vault_addr, token=vault_token)['secret']['READARR_API_KEY'] }}
       json: version
     dashboard:
       icon: "https://raw.githubusercontent.com/Readarr/Readarr/develop/Logo/1024.png"
@@ -322,7 +322,7 @@ service:
       url: "https://sonarr.trez.wtf/api/v3/system/status"
       headers:
         - key: X-Api-Key
-          value: {{ lookup('community.hashi_vault.vault_kv2_get', 'env', engine_mount_point='rinoa-docker', url=vault_addr, token=vault_token_cleaned)['secret']['SONARR_API_KEY'] }}
+          value: {{ lookup('community.hashi_vault.vault_kv2_get', 'env', engine_mount_point='rinoa-docker', url=vault_addr, token=vault_token)['secret']['SONARR_API_KEY'] }}
       json: version
     dashboard:
       web_url: "https://sonarr.trez.wtf/system/updates"

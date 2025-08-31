@@ -25,7 +25,7 @@ qbt:
   # Pass environment variables to the config via !ENV tag
   host: qbittorrentvpn:8080
   user: admin
-  pass: {{ lookup('community.hashi_vault.vault_kv2_get', 'env', engine_mount_point='rinoa-docker', url=vault_addr, token=vault_token_cleaned)['secret']['DELUGEVPN_PASSWORD'] }}
+  pass: {{ lookup('community.hashi_vault.vault_kv2_get', 'env', engine_mount_point='rinoa-docker', url=vault_addr, token=vault_token)['secret']['DELUGEVPN_PASSWORD'] }}
 
 settings:
   force_auto_tmm: False # Will force qBittorrent to enable Automatic Torrent Management for each torrent.
@@ -222,4 +222,4 @@ apprise:
   # Mandatory to fill out the url of your apprise API endpoint
   api_url: http://apprise-api:8000
   # Mandatory to fill out the notification url/urls based on the notification services provided by apprise. https://github.com/caronc/apprise/wiki
-  notify_url: gotify://gotify/{{ lookup('community.hashi_vault.vault_kv2_get', 'env', engine_mount_point='rinoa-docker', url=vault_addr, token=vault_token_cleaned)['secret']['APPRISE_GOTIFY_TOKEN'] }}
+  notify_url: gotify://gotify/{{ lookup('community.hashi_vault.vault_kv2_get', 'env', engine_mount_point='rinoa-docker', url=vault_addr, token=vault_token)['secret']['APPRISE_GOTIFY_TOKEN'] }}
