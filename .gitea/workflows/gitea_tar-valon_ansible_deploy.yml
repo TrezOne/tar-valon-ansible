@@ -10,6 +10,7 @@ on:
       - 'inventory/hosts.yml'
       - 'host_vars/**'
       - 'group_vars/**'
+      - '**/tar-valon_config_deploy.yml'
       - '**/gitea_tar-valon_ansible_deploy.yml'
 
 env:

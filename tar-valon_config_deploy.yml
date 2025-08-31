@@ -18,7 +18,7 @@
       register: host_files
       delegate_to: localhost
       run_once: true
-      run_on_delegate: true
+      changed_when: false   # ensures this task never shows as "changed"
 
     - name: Build list of unique destination directories
       ansible.builtin.set_fact:
@@ -32,6 +32,7 @@
             | unique
             | list
           }}
+      changed_when: false   # computing vars does not constitute a change
 
   tasks:
     - name: Ensure destination directories exist (unique set)
@@ -48,7 +49,7 @@
         src: "{{ item.path }}"
         dest: >-
           {{ appdata_base_path }}/{{ item.path
-          | relpath(template_base_path + '/' + inventory_hostname)
+          | relpath(template_base_path ~ '/' ~ inventory_hostname)
           | regex_replace('\.j2$', '') }}
         mode: '0644'
       loop: "{{ host_files.files }}"
@@ -61,7 +62,7 @@
         src: "{{ item.path }}"
         dest: >-
           {{ appdata_base_path }}/{{ item.path
-          | relpath(template_base_path + '/' + inventory_hostname) }}
+          | relpath(template_base_path ~ '/' ~ inventory_hostname) }}
         mode: '0644'
         remote_src: false
       loop: "{{ host_files.files }}"
