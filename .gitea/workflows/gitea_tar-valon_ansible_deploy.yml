@@ -111,7 +111,7 @@ jobs:
       - name: Run Ansible Dry Run
         uses: dawidd6/action-ansible-playbook@v3
         with:
-          directory: ansible/
+          directory: .
           playbook: homelab_config_deploy.yml
           key: ${{ secrets.ANSIBLE_PRIVATE_KEY }}
           requirements: collections/requirements.yml
@@ -200,7 +200,7 @@ jobs:
       - name: Run Ansible Config Deployment
         uses: dawidd6/action-ansible-playbook@v3
         with:
-          directory: ansible/
+          directory: .
           playbook: homelab_config_deploy.yml
           key: ${{ secrets.ANSIBLE_PRIVATE_KEY }}
           requirements: collections/requirements.yml
