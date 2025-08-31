@@ -18,7 +18,7 @@
       register: host_files
       delegate_to: localhost
       run_once: true
-      changed_when: false   # ensures this task never shows as "changed"
+      changed_when: false
 
     - name: Build list of unique destination directories
       ansible.builtin.set_fact:
@@ -28,11 +28,11 @@
             | map(attribute='path')
             | map('relpath', template_base_path ~ '/' ~ inventory_hostname)
             | map('dirname')
-            | map('community.general.path_join', appdata_base_path)
+            | map('regex_replace', '^(.*)$', appdata_base_path ~ '/\1')
             | unique
             | list
           }}
-      changed_when: false   # computing vars does not constitute a change
+      changed_when: false
 
   tasks:
     - name: Ensure destination directories exist (unique set)
