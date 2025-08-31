@@ -1,3 +1,2 @@
 appdata_base_path: /home/ovos/.config
-secrets_path: benedikta-config/env
-vault_token_cleaned: "{{ lookup('env','VAULT_TOKEN') }}"
+secrets_path: benedikta-docker/env

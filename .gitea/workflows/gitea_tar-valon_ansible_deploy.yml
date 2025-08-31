@@ -8,7 +8,9 @@ on:
     paths:
       - 'app-configs/**'
       - 'inventory/hosts.yml'
-      - 'host_vars/**.yml'
+      - 'host_vars/**'
+      - 'group_vars/**'
+      - '**/gitea_tar-valon_ansible_deploy.yml'
 
 env:
   VAULT_ADDR: ${{ secrets.VAULT_ADDR }}
@@ -81,8 +83,8 @@ jobs:
       - name: Cache Ansible Galaxy Collections
         uses: actions/cache@v3
         with:
-          path: ansible/collections
-          key: ${{ runner.os }}-ansible-${{ hashFiles('./ansible/collections/requirements.yml') }}
+          path: collections
+          key: ${{ runner.os }}-ansible-${{ hashFiles('./collections/requirements.yml') }}
           restore-keys: |
             ${{ runner.os }}-ansible-
 
@@ -110,8 +112,9 @@ jobs:
       - name: Run Ansible Dry Run
         uses: dawidd6/action-ansible-playbook@v3
         with:
-          directory: ansible/
-          playbook: homelab_config_deploy.yml
+          directory: .
+          playbook: tar-valon_config_deploy.yml
+          vault_password: ${{ secrets.ANSIBLE_VAULT_PASSWORD }}
           key: ${{ secrets.ANSIBLE_PRIVATE_KEY }}
           requirements: collections/requirements.yml
           options: |
@@ -199,8 +202,9 @@ jobs:
       - name: Run Ansible Config Deployment
         uses: dawidd6/action-ansible-playbook@v3
         with:
-          directory: ansible/
-          playbook: homelab_config_deploy.yml
+          directory: .
+          playbook: tar-valon_config_deploy.yml
+          vault_password: ${{ secrets.ANSIBLE_VAULT_PASSWORD }}
           key: ${{ secrets.ANSIBLE_PRIVATE_KEY }}
           requirements: collections/requirements.yml
           options: |
