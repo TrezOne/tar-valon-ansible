@@ -10,21 +10,48 @@
     # template_base_path and vault_addr from group_vars/all.yml
     # appdata_base_path, secrets_path, vault_token_cleaned from host_vars/<host>.yml
 
-  tasks:
+  pre_tasks:
     - name: Find all files for this host
       ansible.builtin.find:
         paths: "{{ template_base_path }}/{{ inventory_hostname }}"
-        recurse: yes
+        recurse: true
       register: host_files
       delegate_to: localhost
       run_once: true
+      changed_when: false
+
+    - name: Build list of unique destination directories
+      ansible.builtin.set_fact:
+        dest_dirs: >-
+          {{
+            host_files.files
+            | map(attribute='path')
+            | map('relpath', template_base_path ~ '/' ~ inventory_hostname)
+            | map('dirname')
+            | map('regex_replace', '^(.*)$', appdata_base_path ~ '/\1')
+            | unique
+            | list
+          }}
+      changed_when: false
+
+  tasks:
+    - name: Ensure destination directories exist (unique set)
+      ansible.builtin.file:
+        path: "{{ item }}"
+        state: directory
+        mode: '0755'
+      loop: "{{ dest_dirs }}"
+      loop_control:
+        label: "{{ item }}"
 
     - name: Deploy Jinja2 templates (skip unchanged)
       ansible.builtin.template:
         src: "{{ item.path }}"
-        dest: "{{ appdata_base_path }}/{{ item.path | relpath(template_base_path + '/' + inventory_hostname) | regex_replace('\\.j2$', '') }}"
+        dest: >-
+          {{ appdata_base_path }}/{{ item.path
+          | relpath(template_base_path ~ '/' ~ inventory_hostname)
+          | regex_replace('\.j2$', '') }}
         mode: '0644'
-        create_dirs: yes
       loop: "{{ host_files.files }}"
       loop_control:
         label: "{{ item.path }}"
@@ -33,10 +60,11 @@
     - name: Deploy static files (skip unchanged)
       ansible.builtin.copy:
         src: "{{ item.path }}"
-        dest: "{{ appdata_base_path }}/{{ item.path | relpath(template_base_path + '/' + inventory_hostname) }}"
+        dest: >-
+          {{ appdata_base_path }}/{{ item.path
+          | relpath(template_base_path ~ '/' ~ inventory_hostname) }}
         mode: '0644'
-        remote_src: no
-        create_dirs: yes
+        remote_src: false
       loop: "{{ host_files.files }}"
       loop_control:
         label: "{{ item.path }}"
