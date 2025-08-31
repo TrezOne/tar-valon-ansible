@@ -82,8 +82,8 @@ jobs:
       - name: Cache Ansible Galaxy Collections
         uses: actions/cache@v3
         with:
-          path: ansible/collections
-          key: ${{ runner.os }}-ansible-${{ hashFiles('./ansible/collections/requirements.yml') }}
+          path: collections
+          key: ${{ runner.os }}-ansible-${{ hashFiles('./collections/requirements.yml') }}
           restore-keys: |
             ${{ runner.os }}-ansible-
 
