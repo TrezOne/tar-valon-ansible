@@ -1,5 +1,5 @@
 ---
-- name: Deploy Docker Service Configurations (Mirrored & Vault-ready)
+- name: Deploy Docker Service Configurations (Optimized & Vault-ready)
   hosts:
     - rinoa
     - rikku
@@ -11,10 +11,6 @@
     # appdata_base_path, secrets_path, vault_token_cleaned from host_vars/<host>.yml
 
   tasks:
-    - name: Set vault token from environment
-      ansible.builtin.set_fact:
-        vault_token_cleaned: "{{ lookup('env', vault_token_env_var) }}"
-
     - name: Find all files for this host
       ansible.builtin.find:
         paths: "{{ template_base_path }}/{{ inventory_hostname }}"
@@ -28,6 +24,7 @@
         src: "{{ item.path }}"
         dest: "{{ appdata_base_path }}/{{ item.path | community.general.relpath(template_base_path + '/' + inventory_hostname) | regex_replace('\\.j2$', '') }}"
         mode: '0644'
+        create_dirs: yes
       loop: "{{ host_files.files }}"
       loop_control:
         label: "{{ item.path }}"
@@ -39,6 +36,7 @@
         dest: "{{ appdata_base_path }}/{{ item.path | community.general.relpath(template_base_path + '/' + inventory_hostname) }}"
         mode: '0644'
         remote_src: no
+        create_dirs: yes
       loop: "{{ host_files.files }}"
       loop_control:
         label: "{{ item.path }}"

@@ -6,9 +6,13 @@ on:
     branches-ignore:
       - 'main'
     paths:
-      - '**.j2'
-      - '**/pr-ansible-config-deployment.yaml'
-      - 'ansible/**.yml'
+      - 'app-configs/**'
+      - 'inventory/hosts.yml'
+      - 'host_vars/**.yml'
+
+env:
+  VAULT_ADDR: ${{ secrets.VAULT_ADDR }}
+  VAULT_TOKEN: ${{ secrets.VAULT_GITEA_TOKEN }}
 
 jobs:
   check-and-create-pr:
@@ -31,8 +35,8 @@ jobs:
       - name: Gotify Notification
         uses: eikendev/gotify-action@master
         with:
-          gotify_api_base: '${{ secrets.RINOA_GOTIFY_URL }}'
-          gotify_app_token: '${{ secrets.RINOA_RUNNER_GOTIFY_TOKEN }}'
+          gotify_api_base: '${{ secrets.GOTIFY_URL }}'
+          gotify_app_token: '${{ secrets.RUNNER_GOTIFY_TOKEN }}'
           notification_title: 'GITEA: PR Check'
           notification_message: 'Checking for existing PR... 🔍'
 
@@ -40,7 +44,7 @@ jobs:
         id: check-opened-pr-step
         continue-on-error: true
         run: |
-          tea login add --name gitea-rinoa --url "${{ secrets.RINOA_GITEA_URL }}" --user gitea-sonarqube-bot --password "${{ secrets.BOT_GITEA_PASSWORD }}" --token ${{ secrets.BOT_GITEA_TOKEN }}
+          tea login add --name gitea-rinoa --url "${{ secrets.TV_GITEA_URL }}" --user gitea-sonarqube-bot --password "${{ secrets.BOT_GITEA_PASSWORD }}" --token ${{ secrets.BOT_GITEA_TOKEN }}
           pr_exists=$(tea pr list --repo ${{ github.repository }} --state open --fields index,title,head | egrep '\[ANSIBLE\].*${{ github.ref_name }}' | tail -1 | wc -l)
           echo "exists=$pr_exists" >> $GITHUB_OUTPUT
 
@@ -55,8 +59,8 @@ jobs:
       - name: Gotify Notification
         uses: eikendev/gotify-action@master
         with:
-          gotify_api_base: '${{ secrets.RINOA_GOTIFY_URL }}'
-          gotify_app_token: '${{ secrets.RINOA_RUNNER_GOTIFY_TOKEN }}'
+          gotify_api_base: '${{ secrets.GOTIFY_URL }}'
+          gotify_app_token: '${{ secrets.RUNNER_GOTIFY_TOKEN }}'
           notification_title: 'GITEA: PR Check'
           notification_message: 'PR Created 🎟️'
 
@@ -68,7 +72,7 @@ jobs:
       matrix:
         host: [rinoa, rikku, benedikta]
     env:
-      VAULT_ADDR: ${{ secrets.RINOA_VAULT_ADDR }}
+      VAULT_ADDR: ${{ secrets.VAULT_ADDR }}
       VAULT_TOKEN: ${{ secrets.VAULT_GITEA_TOKEN }}
     steps:
       - name: Checkout
@@ -98,8 +102,8 @@ jobs:
       - name: Gotify Notification
         uses: eikendev/gotify-action@master
         with:
-          gotify_api_base: '${{ secrets.RINOA_GOTIFY_URL }}'
-          gotify_app_token: '${{ secrets.RINOA_RUNNER_GOTIFY_TOKEN }}'
+          gotify_api_base: '${{ secrets.GOTIFY_URL }}'
+          gotify_app_token: '${{ secrets.RUNNER_GOTIFY_TOKEN }}'
           notification_title: 'GITEA: Ansible Dry Run'
           notification_message: 'Starting dry run for ${{ matrix.host }}...'
 
@@ -108,8 +112,7 @@ jobs:
         with:
           directory: ansible/
           playbook: homelab_config_deploy.yml
-          key: ${{ secrets.RINOA_ANSIBLE_PRIVATE_KEY }}
-          vault_password: ${{ secrets.ANSIBLE_VAULT_PASSWORD }}
+          key: ${{ secrets.ANSIBLE_PRIVATE_KEY }}
           requirements: collections/requirements.yml
           options: |
             --inventory inventory/hosts.yml
@@ -119,8 +122,8 @@ jobs:
       - name: Gotify Notification
         uses: eikendev/gotify-action@master
         with:
-          gotify_api_base: '${{ secrets.RINOA_GOTIFY_URL }}'
-          gotify_app_token: '${{ secrets.RINOA_RUNNER_GOTIFY_TOKEN }}'
+          gotify_api_base: '${{ secrets.GOTIFY_URL }}'
+          gotify_app_token: '${{ secrets.RUNNER_GOTIFY_TOKEN }}'
           notification_title: 'GITEA: Ansible Dry Run'
           notification_message: 'Dry run for ${{ matrix.host }} completed.'
 
@@ -142,7 +145,7 @@ jobs:
       - name: PR Merge
         id: pr_merge
         run: |
-          tea login add --name gitea-rinoa --url ${{ secrets.RINOA_GITEA_URL }} --user gitea-sonarqube-bot --password "${{ secrets.BOT_GITEA_PASSWORD }}" --token ${{ secrets.BOT_GITEA_TOKEN }}
+          tea login add --name gitea-rinoa --url ${{ secrets.TV_GITEA_URL }} --user gitea-sonarqube-bot --password "${{ secrets.BOT_GITEA_PASSWORD }}" --token ${{ secrets.BOT_GITEA_TOKEN }}
           tea login default gitea-rinoa
           pr_index=$(tea pr ls --repo ${{ github.repository }} --state open --fields index,title,head,state --output csv | egrep ${{ github.ref_name }} | awk -F"," '{print $1}' | sed -e 's|"||g')
           tea pr m --repo ${{ github.repository }} --title "Auto Merge of PR ${pr_index} - ${{ github.ref_name }}" --message "Merged by ${{ github.actor }}" ${pr_index}
@@ -151,8 +154,8 @@ jobs:
       - name: Gotify Notification
         uses: eikendev/gotify-action@master
         with:
-          gotify_api_base: '${{ secrets.RINOA_GOTIFY_URL }}'
-          gotify_app_token: '${{ secrets.RINOA_RUNNER_GOTIFY_TOKEN }}'
+          gotify_api_base: '${{ secrets.GOTIFY_URL }}'
+          gotify_app_token: '${{ secrets.RUNNER_GOTIFY_TOKEN }}'
           notification_title: 'GITEA: PR Merge Successful'
           notification_message: 'PR #${{ steps.pr_merge.outputs.pr_index }} merged.'
 
@@ -164,7 +167,7 @@ jobs:
       matrix:
         host: [rinoa, rikku, benedikta]
     env:
-      VAULT_ADDR: ${{ secrets.RINOA_VAULT_ADDR }}
+      VAULT_ADDR: ${{ secrets.VAULT_ADDR }}
       VAULT_TOKEN: ${{ secrets.VAULT_GITEA_TOKEN }}
     steps:
       - name: Checkout
@@ -188,8 +191,8 @@ jobs:
       - name: Gotify Notification
         uses: eikendev/gotify-action@master
         with:
-          gotify_api_base: '${{ secrets.RINOA_GOTIFY_URL }}'
-          gotify_app_token: '${{ secrets.RINOA_RUNNER_GOTIFY_TOKEN }}'
+          gotify_api_base: '${{ secrets.GOTIFY_URL }}'
+          gotify_app_token: '${{ secrets.RUNNER_GOTIFY_TOKEN }}'
           notification_title: 'GITEA: Ansible Config Deployment'
           notification_message: 'Deploying configs to ${{ matrix.host }}...'
 
@@ -198,8 +201,7 @@ jobs:
         with:
           directory: ansible/
           playbook: homelab_config_deploy.yml
-          key: ${{ secrets.RINOA_ANSIBLE_PRIVATE_KEY }}
-          vault_password: ${{ secrets.ANSIBLE_VAULT_PASSWORD }}
+          key: ${{ secrets.ANSIBLE_PRIVATE_KEY }}
           requirements: collections/requirements.yml
           options: |
             --inventory inventory/hosts.yml
@@ -208,7 +210,7 @@ jobs:
       - name: Gotify Notification
         uses: eikendev/gotify-action@master
         with:
-          gotify_api_base: '${{ secrets.RINOA_GOTIFY_URL }}'
-          gotify_app_token: '${{ secrets.RINOA_RUNNER_GOTIFY_TOKEN }}'
+          gotify_api_base: '${{ secrets.GOTIFY_URL }}'
+          gotify_app_token: '${{ secrets.RUNNER_GOTIFY_TOKEN }}'
           notification_title: 'GITEA: Deployment Completed'
           notification_message: 'Deployment to ${{ matrix.host }} completed successfully.'
