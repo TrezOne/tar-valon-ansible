@@ -1,2 +1,2 @@
 appdata_base_path: /home/ovos/.config
-secrets_path: benedikta-config/env
+secrets_path: benedikta-docker/env

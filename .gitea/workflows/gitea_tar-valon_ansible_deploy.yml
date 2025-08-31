@@ -113,6 +113,7 @@ jobs:
         with:
           directory: .
           playbook: tar-valon_config_deploy.yml
+          vault_password: ${{ secrets.ANSIBLE_VAULT_PASSWORD }}
           key: ${{ secrets.ANSIBLE_PRIVATE_KEY }}
           requirements: collections/requirements.yml
           options: |
@@ -202,6 +203,7 @@ jobs:
         with:
           directory: .
           playbook: tar-valon_config_deploy.yml
+          vault_password: ${{ secrets.ANSIBLE_VAULT_PASSWORD }}
           key: ${{ secrets.ANSIBLE_PRIVATE_KEY }}
           requirements: collections/requirements.yml
           options: |
