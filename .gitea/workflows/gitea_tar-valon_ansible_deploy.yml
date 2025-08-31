@@ -45,7 +45,7 @@ jobs:
         id: check-opened-pr-step
         continue-on-error: true
         run: |
-          tea login add --name gitea-rinoa --url git.trez.wtf --user gitea-sonarqube-bot --password "${{ secrets.BOT_GITEA_PASSWORD }}" --token ${{ secrets.BOT_GITEA_TOKEN }}
+          tea login add --name gitea-rinoa --url "${{ secrets.TV_GITEA_URL }}" --user gitea-sonarqube-bot --password "${{ secrets.BOT_GITEA_PASSWORD }}" --token ${{ secrets.BOT_GITEA_TOKEN }}
           tea pr list --repo ${{ github.repository }} --state all
           tea pr list --repo ${{ github.repository }} --state open --fields index,title,head | egrep '\[ANSIBLE\].*${{ github.ref_name }}'
           echo "Checking for PR..."
