@@ -9,6 +9,7 @@ on:
       - 'app-configs/**'
       - 'inventory/hosts.yml'
       - 'host_vars/**.yml'
+      - '**/gitea_tar-valon_ansible_deploy.yml'
 
 env:
   VAULT_ADDR: ${{ secrets.VAULT_ADDR }}
@@ -45,6 +46,7 @@ jobs:
         continue-on-error: true
         run: |
           tea login add --name gitea-rinoa --url "${{ secrets.TV_GITEA_URL }}" --user gitea-sonarqube-bot --password "${{ secrets.BOT_GITEA_PASSWORD }}" --token ${{ secrets.BOT_GITEA_TOKEN }}
+          tea pr list --repo ${{ github.repository }} --state all
           pr_exists=$(tea pr list --repo ${{ github.repository }} --state open --fields index,title,head | egrep '\[ANSIBLE\].*${{ github.ref_name }}' | tail -1 | wc -l)
           echo "exists=$pr_exists" >> $GITHUB_OUTPUT
 
