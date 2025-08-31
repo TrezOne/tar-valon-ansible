@@ -8,7 +8,8 @@ on:
     paths:
       - 'app-configs/**'
       - 'inventory/hosts.yml'
-      - 'host_vars/**.yml'
+      - 'host_vars/**'
+      - 'group_vars/**'
       - '**/gitea_tar-valon_ansible_deploy.yml'
 
 env:
