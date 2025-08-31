@@ -28,7 +28,7 @@
             | map(attribute='path')
             | map('relpath', template_base_path ~ '/' ~ inventory_hostname)
             | map('dirname')
-            | map('path_join', appdata_base_path)
+            | map('community.general.path_join', appdata_base_path)
             | unique
             | list
           }}
