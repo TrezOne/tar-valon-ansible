@@ -62,7 +62,7 @@ jobs:
           echo ${GITHUB_WORKSPACE}
 
       - name: 🚀 Run Home Assistant Configuration Check
-        uses: https://git.trez.wtf/Trez.One/action-home-assistant
+        uses: https://git.trez.wtf/Trez.One/action-home-assistant@main
         with:
           path: "app-configs/rikku/homeassistant"
           version: "stable"
