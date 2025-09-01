@@ -60,8 +60,7 @@ jobs:
       - name: Debug
         run: |
           pwd
-          find ${GITHUB_WORKSPACE}/app-configs/rikku -type f -name "configuration.yaml"
-          echo "Workspace dir: ${GITHUB_WORKSPACE}"
+          echo "Workspace dir: ${{ github.workspace }}"
           echo ${{ env.JOB_CONTAINER_NAME }}
 
       - name: 🚀 Run Home Assistant Configuration Check
