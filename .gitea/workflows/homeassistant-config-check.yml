@@ -59,7 +59,7 @@ jobs:
 
       - name: Debug
         run: |
-          find ${GITHUB_WORKSPACE}/rikku -type f -name "configuration.yaml"
+          find ${GITHUB_WORKSPACE}/app-configs/rikku -type f -name "configuration.yaml"
           echo "Workspace dir: ${GITHUB_WORKSPACE}"
           echo ${{ env.JOB_CONTAINER_NAME }}
 
