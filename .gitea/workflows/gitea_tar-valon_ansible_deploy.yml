@@ -12,6 +12,7 @@ on:
       - 'group_vars/**'
       - '**/tar-valon_config_deploy.yml'
       - '**/gitea_tar-valon_ansible_deploy.yml'
+      - '!app-configs/rikku/homeassistant'
 
 env:
   VAULT_ADDR: ${{ secrets.VAULT_ADDR }}
