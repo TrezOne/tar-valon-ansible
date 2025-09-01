@@ -2,6 +2,11 @@ name: Gitea Branch PR & Ansible Deployment
 
 on:
   workflow_dispatch:
+  workflow_run:
+    workflows: ["Home Assistant Config Check"]
+    types:
+      - completed
+    branches: main
   push:
     branches-ignore:
       - 'main'
