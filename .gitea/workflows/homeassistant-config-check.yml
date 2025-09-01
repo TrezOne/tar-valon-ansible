@@ -11,9 +11,6 @@ on:
 jobs:
   home-assistant-config-check:
     name: Home Assistant Configuration Check
-    needs: [check-and-create-pr]
-    env:
-      HA_VERSION: "2025.8.3"
     runs-on: ubuntu-latest
 
     steps:
