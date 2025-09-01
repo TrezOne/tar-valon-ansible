@@ -58,7 +58,7 @@ jobs:
 
       - name: Debug
         run: |
-          pwd
+          echo "Workspace dir: ${GITHUB_WORKSPACE}"
           echo ${{ env.JOB_CONTAINER_NAME }}
 
       - name: 🚀 Run Home Assistant Configuration Check
