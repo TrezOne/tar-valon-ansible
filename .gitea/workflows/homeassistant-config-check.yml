@@ -7,6 +7,7 @@ on:
       - 'main'
     paths:
       - 'app-configs/rikku/homeassistant/configuration.yaml'
+      - '**/homeassistant-config-check.yml'
 
 jobs:
   home-assistant-config-check:
@@ -58,6 +59,7 @@ jobs:
 
       - name: Debug
         run: |
+          find ${GITHUB_WORKSPACE}/rikku -type f -name "configuration.yaml"
           echo "Workspace dir: ${GITHUB_WORKSPACE}"
           echo ${{ env.JOB_CONTAINER_NAME }}
 
