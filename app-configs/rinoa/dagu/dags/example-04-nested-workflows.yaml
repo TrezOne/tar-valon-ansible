@@ -1,0 +1,24 @@
+# Nested Workflows
+# Call other workflows as sub-workflows
+
+description: Example of nested workflows
+
+steps:
+  - command: echo "Preparing data for sub-workflows"
+    
+  - run: sub-workflow
+    params: "TASK_ID=123"
+    
+  - command: echo "Main workflow completed"
+
+---
+# Sub-workflow definition
+name: sub-workflow
+description: Sub-workflow that gets called by main
+params:
+  - TASK_ID: "000"
+  
+steps:
+  - command: echo "Sub-workflow executing with TASK_ID=${TASK_ID}"
+    
+  - command: echo "Sub-workflow step 2"
