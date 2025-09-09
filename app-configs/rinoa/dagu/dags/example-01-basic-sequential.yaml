@@ -1,0 +1,11 @@
+# Basic Sequential Execution
+# Steps execute one after another in order
+
+description: Execute steps one after another
+
+steps:
+  - command: echo "Step 1 - Starting workflow"
+    
+  - command: echo "Step 2 - Processing data"
+    
+  - command: echo "Step 3 - Workflow complete"
