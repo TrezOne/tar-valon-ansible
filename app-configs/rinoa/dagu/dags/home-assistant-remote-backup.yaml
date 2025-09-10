@@ -1,0 +1,41 @@
+name: home-assistant-backup-sync
+description: "Daily rsync of latest Home Assistant .tar backup and prune older archives"
+schedule: "30 5 * * *"
+ssh:
+  user: pi
+  host: 192.168.1.252
+  key: /dagu/ssh/dagu_id_rsa
+  strictHostKey: true
+
+
+steps:
+  - name: find-latest-backup
+    executor:
+      type: ssh
+      config:
+        # Inherit DAG-level SSH config (user=pi, host=192.168.1.252)
+    command: >
+      ls -t /home/pi/.config/docker/homeassistant/backups/*.tar |
+      head -n 1
+    output: LATEST_TAR
+
+  - name: rsync-to-destination
+    depends: find-latest-backup
+    # Execute locally (shell executor)
+    command: >
+      rsync -avz
+      pi@192.168.1.252:$(cat ${LATEST_TAR})
+      charish@192.168.1.254:/rinoa-storage/backups/home-assistant
+
+  - name: prune-old-backups
+    depends: rsync-to-destination
+    executor:
+      type: ssh
+      config:
+        user: charish
+        host: 192.168.1.254
+        key: /dagu/ssh/dagu_id_rsa
+        strictHostKey: true
+    command: >
+      cd /rinoa-storage/backups/home-assistant &&
+      ls -t *.tar | tail -n +8 | xargs -r rm --
