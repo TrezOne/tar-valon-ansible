@@ -12,8 +12,6 @@ steps:
   - name: find-latest-backup
     executor:
       type: ssh
-      config:
-        # Inherit DAG-level SSH config (user=pi, host=192.168.1.252)
     command: >
       ls -t /home/pi/.config/docker/homeassistant/backups/*.tar |
       head -n 1
