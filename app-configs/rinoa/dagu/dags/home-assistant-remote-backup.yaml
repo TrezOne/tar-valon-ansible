@@ -22,7 +22,9 @@ steps:
     depends: find-latest-backup
     # Execute locally (shell executor)
     command: >
-      rsync -avz
+      which rsync ;
+      cat ${LATEST_TAR} ;
+      rsync -avz --progress
       pi@192.168.1.252:$(cat ${LATEST_TAR})
       charish@192.168.1.254:/rinoa-storage/backups/home-assistant
 
