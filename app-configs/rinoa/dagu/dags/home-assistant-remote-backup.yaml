@@ -7,7 +7,7 @@ ssh:
   host: 192.168.1.252
   key: /dagu/ssh/dagu_id_rsa
   strictHostKey: true
-  knownHostsFile: /dagu/ssh/known_hosts
+  knownHostFile: /dagu/ssh/known_hosts
 
 steps:
   - name: find-latest-backup
