@@ -20,12 +20,9 @@ steps:
 
   - name: rsync-to-destination
     depends: find-latest-backup
-    # Execute locally (shell executor)
     command: >
-      which rsync ;
-      cat ${LATEST_TAR} ;
       rsync -avz --progress
-      pi@192.168.1.252:$(cat ${LATEST_TAR})
+      $(echo ${LATEST_TAR})
       charish@192.168.1.254:/rinoa-storage/backups/home-assistant
 
   - name: prune-old-backups
@@ -36,6 +33,7 @@ steps:
         user: charish
         host: 192.168.1.254
         key: /dagu/ssh/dagu_id_rsa
+        knownHostFile: /dagu/ssh/known_hosts
         strictHostKey: true
     command: >
       cd /rinoa-storage/backups/home-assistant &&
