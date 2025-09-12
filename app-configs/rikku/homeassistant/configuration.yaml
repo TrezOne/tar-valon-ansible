@@ -25,3 +25,17 @@ http:
   trusted_proxies: 192.168.1.254
 
 browser:
+
+ingress:
+  adguard:
+    work_mode: ingress
+    ui_mode: toolbar
+    title: AdGuardHome
+    icon: si:adguard
+    url: http://adguard
+  ha-fusion:
+    work_mode: ingress
+    ui_mode: toolbar
+    title: HA Fusion
+    icon: mdi:monitor-dashboard
+    url: http://ha-fusion:5050
