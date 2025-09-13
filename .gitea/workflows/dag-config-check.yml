@@ -1,0 +1,67 @@
+# .github/workflows/validate-dags.yml
+name: Validate DAGs
+
+on:
+  workflow_dispatch:
+  push:
+    paths: ['./app-configs/rinoa/dagu/dags/**']
+    branches-ignore:
+      - main
+
+env:
+  DAGS_PATH: "./app-configs/rinoa/dagu/dags"
+  VAULT_ADDR: ${{ secrets.VAULT_ADDR }}
+  VAULT_TOKEN: ${{ secrets.VAULT_TOKEN }}
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Ansible
+        uses: alex-oleshkevich/setup-ansible@v1.0.1
+        with:
+          version: "11.4.0"
+
+      - name: Set up Vault CLI
+        uses: hashicorp/setup-vault@v2
+        with:
+          version: 1.18.0
+
+      - name: Install hvac (Vault Python SDK)
+        run: pip install hvac
+
+      - name: Render .yaml.j2 templates
+        uses: dawidd6/action-ansible-playbook@v2
+        with:
+          directory: .
+          vault_password: ${{ secrets.ANSIBLE_VAULT_PASSWORD }}
+          requirements: collections/requirements.yml
+          playbook: |
+            - hosts: localhost
+              gather_facts: false
+              vars:
+                vault_addr: ${{ env.VAULT_ADDR }}
+                vault_token: ${{ env.VAULT_TOKEN }}
+                dags_path: ${{ env.DAGS_PATH }}
+              tasks:
+                - name: Render DAG templates
+                  template:
+                    src: "{{ item }}"
+                    dest: "{{ item | regex_replace('\\.j2$', '') }}"
+                  loop: "{{ lookup('fileglob', dags_path ~ '/*.yaml.j2', wantlist=True) }}"
+
+      - name: Install dagu
+        uses: jaxxstorm/action-install-gh-release@v1
+        with:
+          repo: dagu-org/dagu
+          platform: linux
+          arch: amd64
+
+      - name: Validate DAGs
+        run: |
+          for dag in $(find ${DAGS_PATH} -type f -name "*.yaml" -a ! -name "*example*"); do
+            echo "Validating $dag"
+            dagu dry "$dag"
+          done
