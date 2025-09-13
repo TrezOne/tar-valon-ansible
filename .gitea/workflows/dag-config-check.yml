@@ -24,9 +24,9 @@ jobs:
           version: "11.4.0"
 
       - name: Set up Vault CLI
-        uses: hashicorp/setup-vault@v2
+        uses: eLco/setup-vault@v1
         with:
-          version: 1.18.0
+          vault_version: 1.18.0
 
       - name: Install hvac (Vault Python SDK)
         run: pip install hvac
