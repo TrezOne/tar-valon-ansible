@@ -1,0 +1,33 @@
+name: mariadb-backup
+description: "Backup of all databases from MariaDB container"
+schedule: "30 23 * * *"
+
+env:
+  MARIADB_ROOT_PASSWORD: {{ lookup('community.hashi_vault.vault_kv2_get', 'env', engine_mount_point='rinoa-docker', url=vault_addr, token=vault_token)['secret']['MARIADB_ENVIRONMENT_MYSQL_ROOT_PASSWORD'] }}
+
+steps:
+  - name: list-all-databases
+    shell: nix-shell
+    shellPackages: [mariadb]
+    command: |
+      mariadb -h mariadb -u root -p"${MARIADB_ROOT_PASSWORD}" -Nse "SHOW DATABASES;" | egrep -v '(information|performance)_schema|mysql|sys'
+    output: RINOA_MADB_LIST
+
+  - name: db-folder-check-creation-backup
+    depends: list-all-databases
+    shell: nix-shell
+    shellPackages: [mariadb]
+    workingDir: /backups/dbs/mariadb
+    script: |
+      for mdatabase in $(echo ${RINOA_MADB_LIST}) ; do
+        mkdir -p ${mdatabase}
+        mariadb_dump --user=root --password"${MARIADB_ROOT_PASSWORD}" --databases ${madb} > ${mdatabase}/${mdatabase}_$(date +%Y-%m-%dT%H-%M-%S).sql
+      done
+
+  - name: db-backup-cleanup
+    depends:
+      - list-all-databases
+      - db-folder-check-creation-backup
+    workingDir: /backups/dbs/mariadb
+    command: >
+      find $(pwd) -type f -name "*.sql" -ctime +7 | xargs rm -fv
