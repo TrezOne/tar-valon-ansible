@@ -3,7 +3,7 @@ name: Gitea Branch PR & Ansible Deployment
 on:
   workflow_dispatch:
   workflow_run:
-    workflows: [Home Assistant Config Check, Validate DAs]
+    workflows: [Home Assistant Config Check, Validate DAGs]
     types:
       - completed
     branches: main
@@ -11,13 +11,9 @@ on:
     branches-ignore:
       - 'main'
     paths:
-      - 'app-configs/**'
-      - 'inventory/hosts.yml'
-      - 'host_vars/**'
-      - 'group_vars/**'
-      - '**/tar-valon_config_deploy.yml'
-      - '**/gitea_tar-valon_ansible_deploy.yml'
       - '!app-configs/rikku/homeassistant/**'
+      - '!app-configs/rinoa/dagu/dags/**'
+      - 'app-configs/**'
 
 env:
   VAULT_ADDR: ${{ secrets.VAULT_ADDR }}
@@ -120,7 +116,7 @@ jobs:
         uses: dawidd6/action-ansible-playbook@v3
         with:
           directory: .
-          playbook: tar-valon_config_deploy.yml
+          playbook: playbooks/tar-valon_config_deploy.yml
           vault_password: ${{ secrets.ANSIBLE_VAULT_PASSWORD }}
           key: ${{ secrets.ANSIBLE_PRIVATE_KEY }}
           requirements: collections/requirements.yml
