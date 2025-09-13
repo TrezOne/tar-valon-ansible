@@ -2,8 +2,11 @@
 name: Validate DAGs
 
 on:
+  workflow_dispatch:
   push:
     paths: ['./app-configs/rinoa/dagu/dags/**']
+    branches-ignore:
+      - main
 
 env:
   DAGS_PATH: "./app-configs/rinoa/dagu/dags"
