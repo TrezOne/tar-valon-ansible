@@ -28,7 +28,6 @@ steps:
 
   - name: db-backup-cleanup
     depends:
-      - list-all-databases
       - db-folder-check-creation-backup
     workingDir: /backups/dbs/mariadb
     command: >
