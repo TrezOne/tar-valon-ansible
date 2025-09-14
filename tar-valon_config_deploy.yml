@@ -6,6 +6,10 @@
     - benedikta
   gather_facts: false
 
+  vars:
+    # template_base_path and vault_addr from group_vars/all.yml
+    # appdata_base_path, secrets_path, vault_token_cleaned from host_vars/<host>.yml
+
   pre_tasks:
     - name: Find all files for this host
       ansible.builtin.find:
