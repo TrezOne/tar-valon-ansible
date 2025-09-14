@@ -1,3 +1,6 @@
+{% set vault_addr = 'https://vault.trez.wtf' %}
+{% set secrets_path = 'rinoa-docker/env' %}
+
 name: mariadb-backup
 description: "Backup of all databases from MariaDB container"
 schedule: "30 23 * * *"
