@@ -105,16 +105,11 @@ jobs:
           notification_title: 'GITEA: Dagu Validation'
           notification_message: 'Dagu DAG validation failed! 🚫'
 
-      - name: Write downstream trigger marker
-        if: steps.validate-dags.outputs.exit_code == '0'
+      - name: Trigger downstream workflow
         run: |
-          echo "DAG validation completed at $(date -u)" > .dag-validation-complete
-
-      - name: Add/Commit Validation Trigger File
-        id: commit-readme
-        uses: EndBug/add-and-commit@v9
-        with:
-          add: ".dag-validation-complete"
-          default_author: github_actor
-          message: "chore: mark DAG validation complete"
-          push: true
+          BRANCH="${GITHUB_REF_NAME}"
+          curl -X POST \
+            -H "Authorization: token ${{ secrets.BOT_GITEA_TOKEN }}" \
+            -H "Content-Type: application/json" \
+            "https://git.trez.wtf/api/v1/repos/Trez/tar-valon-ansible/actions/workflows/gitea_tar-valon_ansible_deploy.yml/dispatches" \
+            -d "{\"ref\":\"${BRANCH}\"}"
