@@ -10,15 +10,16 @@
     template_base_path: "{{ playbook_dir }}/../app-configs"
 
   pre_tasks:
-    - name: Find all files for this host
+    - name: Find all files for all hosts (run once on localhost)
       ansible.builtin.find:
         paths: "{{ template_base_path }}/{{ inventory_hostname }}"
         recurse: true
       register: host_files
-      run_once: true   # can remain run_once, finds files once for all hosts
       delegate_to: localhost
+      run_once: true
+      changed_when: false
 
-    - name: Build list of unique destination directories
+    - name: Build list of unique destination directories per host
       ansible.builtin.set_fact:
         dest_dirs: >-
           {{
@@ -31,7 +32,7 @@
             | list
           }}
       changed_when: false
-      run_once: false
+      run_once: false   # run per host, so host_vars are available
 
   tasks:
     - name: Ensure destination directories exist (unique set)
@@ -59,9 +60,7 @@
     - name: Deploy static files (skip unchanged)
       ansible.builtin.copy:
         src: "{{ item.path }}"
-        dest: >-
-          {{ appdata_base_path }}/{{ item.path
-          | relpath(template_base_path ~ '/' ~ inventory_hostname) }}
+        dest: "{{ appdata_base_path }}/{{ item.path | relpath(template_base_path ~ '/' ~ inventory_hostname) }}"
         mode: '0644'
         remote_src: false
       loop: "{{ host_files.files }}"
