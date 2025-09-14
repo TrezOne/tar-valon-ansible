@@ -22,8 +22,8 @@
       changed_when: false
 
   tasks:
-    - name: Deploy files for this host
-      vars:
+    - name: Set host_files for this host
+      set_fact:
         host_files: >-
           {{
             files_per_host.results
@@ -31,6 +31,9 @@
             | map(attribute='files')
             | first
           }}
+
+    - name: Build list of unique destination directories for this host
+      set_fact:
         dest_dirs: >-
           {{
             host_files
@@ -41,36 +44,36 @@
             | unique
             | list
           }}
-      block:
-        - name: Ensure destination directories exist
-          ansible.builtin.file:
-            path: "{{ item }}"
-            state: directory
-            mode: '0755'
-          loop: "{{ dest_dirs }}"
-          loop_control:
-            label: "{{ item }}"
 
-        - name: Deploy Jinja2 templates
-          ansible.builtin.template:
-            src: "{{ item.path }}"
-            dest: >-
-              {{ appdata_base_path }}/{{ item.path
-              | relpath(template_base_path ~ '/' ~ inventory_hostname)
-              | regex_replace('\.j2$', '') }}
-            mode: '0644'
-          loop: "{{ host_files }}"
-          loop_control:
-            label: "{{ item.path }}"
-          when: item.path.endswith('.j2')
+    - name: Ensure destination directories exist
+      ansible.builtin.file:
+        path: "{{ item }}"
+        state: directory
+        mode: '0755'
+      loop: "{{ dest_dirs }}"
+      loop_control:
+        label: "{{ item }}"
 
-        - name: Deploy static files
-          ansible.builtin.copy:
-            src: "{{ item.path }}"
-            dest: "{{ appdata_base_path }}/{{ item.path | relpath(template_base_path ~ '/' ~ inventory_hostname) }}"
-            mode: '0644'
-            remote_src: false
-          loop: "{{ host_files }}"
-          loop_control:
-            label: "{{ item.path }}"
-          when: not item.path.endswith('.j2')
+    - name: Deploy Jinja2 templates
+      ansible.builtin.template:
+        src: "{{ item.path }}"
+        dest: >-
+          {{ appdata_base_path }}/{{ item.path
+          | relpath(template_base_path ~ '/' ~ inventory_hostname)
+          | regex_replace('\.j2$', '') }}
+        mode: '0644'
+      loop: "{{ host_files }}"
+      loop_control:
+        label: "{{ item.path }}"
+      when: item.path.endswith('.j2')
+
+    - name: Deploy static files
+      ansible.builtin.copy:
+        src: "{{ item.path }}"
+        dest: "{{ appdata_base_path }}/{{ item.path | relpath(template_base_path ~ '/' ~ inventory_hostname) }}"
+        mode: '0644'
+        remote_src: false
+      loop: "{{ host_files }}"
+      loop_control:
+        label: "{{ item.path }}"
+      when: not item.path.endswith('.j2')
