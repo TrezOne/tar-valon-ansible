@@ -105,7 +105,7 @@ jobs:
           notification_title: 'GITEA: Dagu Validation'
           notification_message: 'Dagu DAG validation failed! 🚫'
 
-      - name: Trigger downstream workflow
+      - name: Trigger Tar Valon Ansible Deploy
         run: |
           BRANCH="${GITHUB_REF_NAME}"
           curl -X POST \
