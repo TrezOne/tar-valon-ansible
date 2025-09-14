@@ -11,9 +11,9 @@ on:
     branches-ignore:
       - 'main'
     paths:
+      - 'app-configs/**'
       - '!app-configs/rikku/homeassistant/**'
       - '!app-configs/rinoa/dagu/dags/**'
-      - 'app-configs/**'
 
 env:
   VAULT_ADDR: ${{ secrets.VAULT_ADDR }}
