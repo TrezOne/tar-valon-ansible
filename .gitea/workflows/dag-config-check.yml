@@ -82,7 +82,7 @@ jobs:
       - name: Validate DAGs
         run: |
           for dag in $(find ${DAGS_PATH} -type f -name "*.yaml" -a ! -name "*example*"); do
-            echo -e "\n\n===========Validating ${dag}==========="
+            echo -e "\n\n===========Validating ${dag}===========\n"
             dagu dry "${dag}"
           done
           echo "exit_code=$status" >> $GITHUB_OUTPUT
