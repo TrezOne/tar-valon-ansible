@@ -3,12 +3,14 @@ name: Validate DAGs
 on:
   workflow_dispatch:
   push:
-    paths: ['app-configs/rinoa/dagu/dags/**']
+    paths:
+      - 'app-configs/rinoa/dagu/dags/**'
+      - '**/dag-config-check.yml'
     branches-ignore:
       - main
 
 env:
-  DAGS_PATH: "${GITHUB_WORKSPACE}/app-configs/rinoa/dagu/dags"
+  DAGS_PATH: "app-configs/rinoa/dagu/dags"
   VAULT_ADDR: ${{ secrets.VAULT_ADDR }}
   VAULT_TOKEN: ${{ secrets.VAULT_TOKEN }}
 
@@ -40,11 +42,8 @@ jobs:
           playbook: playbooks/rinoa-render-dags.yml
 
       - name: Install dagu
-        uses: jaxxstorm/action-install-gh-release@v1
-        with:
-          repo: dagu-org/dagu
-          platform: linux
-          arch: amd64
+        run: |
+          curl -L https://raw.githubusercontent.com/dagu-org/dagu/main/scripts/installer.sh | bash
 
       - name: Validate DAGs
         run: |
