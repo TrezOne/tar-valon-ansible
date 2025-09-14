@@ -12,7 +12,7 @@ on:
     branches-ignore:
       - 'main'
     paths:
-      - '.dagu-validation-complete'
+      - '**/.dagu-validation-complete'
       - 'app-configs/**'
       - '!app-configs/rikku/homeassistant/**'
       - '!app-configs/rinoa/dagu/dags/**'
