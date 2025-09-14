@@ -1,3 +1,6 @@
+{% set vault_addr = 'https://vault.trez.wtf' %}
+{% set secrets_path = 'rinoa-docker/env' %}
+
 name: mariadb-backup
 description: "Backup of all databases from MariaDB container"
 schedule: "30 23 * * *"
@@ -21,7 +24,7 @@ steps:
     script: |
       for mdatabase in $(echo ${RINOA_MADB_LIST}) ; do
         mkdir -p ${mdatabase}
-        mariadb_dump --user=root --password"${MARIADB_ROOT_PASSWORD}" --databases ${madb} > ${mdatabase}/${mdatabase}_$(date +%Y-%m-%dT%H-%M-%S).sql
+        mariadb_dump --u root --p"${MARIADB_ROOT_PASSWORD}" --databases ${madb} > ${mdatabase}/dump-$(date +%Y%m%d)-$(cat /proc/sys/kernel/random/uuid).sql
       done
 
   - name: db-backup-cleanup

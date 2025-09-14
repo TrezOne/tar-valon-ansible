@@ -5,6 +5,7 @@
   gather_facts: false
 
   vars:
+    # Hardcoded fallback for DAGs path
     dags_path: "{{ lookup('env', 'DAGS_PATH') }}"
     vault_addr: "{{ lookup('env', 'VAULT_ADDR') }}"
     vault_token: "{{ lookup('env', 'VAULT_TOKEN') }}"
@@ -12,26 +13,11 @@
   tasks:
     - name: Build list of DAG template files
       ansible.builtin.set_fact:
-        dag_templates: "{{ lookup('fileglob', dags_path ~ '/*.yaml.j2', wantlist=True) }}"
-
-    - name: Pre-check Vault secrets in templates
-      when: dag_templates | length > 0
-      block:
-        - name: Find all Vault lookup expressions in templates
-          ansible.builtin.set_fact:
-            vault_keys: >-
-              {{
-                dag_templates
-                | map('lookup', 'file', wantlist=True)
-                | map('regex_findall',
-                      "lookup\\('community.hashi_vault.vault_kv2_get',\\s*'[^']+',\\s*engine_mount_point='[^']+',\\s*url=[^,]+,\\s*token=[^\\)]+\\)\\['secret'\\]\\['([^']+)'\\]")
-                | sum(start=[])
-              }}
-
-        - name: Warn if any Vault keys might be missing
-          loop: "{{ vault_keys }}"
-          ansible.builtin.debug:
-            msg: "Vault key '{{ item }}' will be required by templates"
+        dag_templates: >-
+          {{
+            lookup('ansible.builtin.fileglob', dags_path ~ '/*.yaml.j2', wantlist=True)
+            | default([])
+          }}
 
     - name: Render DAG templates in-place (guarded)
       when: dag_templates | length > 0
