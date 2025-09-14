@@ -10,8 +10,8 @@
     template_base_path: "{{ playbook_dir }}/../app-configs"
 
   pre_tasks:
-    - name: Gather files for all hosts (on localhost)
-      find:
+    - name: Gather all files for each host (on localhost)
+      ansible.builtin.find:
         paths: "{{ template_base_path }}/{{ item }}"
         recurse: true
       loop: "{{ ansible_play_hosts }}"
@@ -22,9 +22,15 @@
       changed_when: false
 
   tasks:
-    - name: Deploy files to each host
+    - name: Deploy files for this host
       vars:
-        host_files: "{{ files_per_host.results | selectattr('item','equalto',inventory_hostname) | map(attribute='files') | first }}"
+        host_files: >-
+          {{
+            files_per_host.results
+            | selectattr('item','equalto',inventory_hostname)
+            | map(attribute='files')
+            | first
+          }}
         dest_dirs: >-
           {{
             host_files
@@ -37,25 +43,34 @@
           }}
       block:
         - name: Ensure destination directories exist
-          file:
+          ansible.builtin.file:
             path: "{{ item }}"
             state: directory
             mode: '0755'
           loop: "{{ dest_dirs }}"
+          loop_control:
+            label: "{{ item }}"
 
         - name: Deploy Jinja2 templates
-          template:
+          ansible.builtin.template:
             src: "{{ item.path }}"
-            dest: "{{ appdata_base_path }}/{{ item.path | relpath(template_base_path ~ '/' ~ inventory_hostname) | regex_replace('\.j2$', '') }}"
+            dest: >-
+              {{ appdata_base_path }}/{{ item.path
+              | relpath(template_base_path ~ '/' ~ inventory_hostname)
+              | regex_replace('\.j2$', '') }}
             mode: '0644'
           loop: "{{ host_files }}"
+          loop_control:
+            label: "{{ item.path }}"
           when: item.path.endswith('.j2')
 
         - name: Deploy static files
-          copy:
+          ansible.builtin.copy:
             src: "{{ item.path }}"
             dest: "{{ appdata_base_path }}/{{ item.path | relpath(template_base_path ~ '/' ~ inventory_hostname) }}"
             mode: '0644'
             remote_src: false
           loop: "{{ host_files }}"
+          loop_control:
+            label: "{{ item.path }}"
           when: not item.path.endswith('.j2')
