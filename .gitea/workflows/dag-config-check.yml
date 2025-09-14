@@ -12,7 +12,7 @@ on:
 env:
   DAGS_PATH: "app-configs/rinoa/dagu/dags"
   VAULT_ADDR: ${{ secrets.VAULT_ADDR }}
-  VAULT_TOKEN: ${{ secrets.VAULT_TOKEN }}
+  VAULT_TOKEN: ${{ secrets.VAULT_GITEA_TOKEN }}
 
 jobs:
   validate:
