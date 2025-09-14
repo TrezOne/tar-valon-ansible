@@ -10,13 +10,12 @@
     template_base_path: "{{ playbook_dir }}/../app-configs"
 
   pre_tasks:
-    - name: Find all files for all hosts (run once on localhost)
+    - name: Find all files for this host
       ansible.builtin.find:
         paths: "{{ template_base_path }}/{{ inventory_hostname }}"
         recurse: true
       register: host_files
-      delegate_to: localhost
-      run_once: true
+      run_once: false    # per host
       changed_when: false
 
     - name: Build list of unique destination directories per host
@@ -32,7 +31,6 @@
             | list
           }}
       changed_when: false
-      run_once: false   # run per host, so host_vars are available
 
   tasks:
     - name: Ensure destination directories exist (unique set)
