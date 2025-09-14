@@ -3,12 +3,12 @@ name: Validate DAGs
 on:
   workflow_dispatch:
   push:
-    paths: ['./app-configs/rinoa/dagu/dags/**']
+    paths: ['app-configs/rinoa/dagu/dags/**']
     branches-ignore:
       - main
 
 env:
-  DAGS_PATH: "./app-configs/rinoa/dagu/dags"
+  DAGS_PATH: "${GITHUB_WORKSPACE}/app-configs/rinoa/dagu/dags"
   VAULT_ADDR: ${{ secrets.VAULT_ADDR }}
   VAULT_TOKEN: ${{ secrets.VAULT_TOKEN }}
 

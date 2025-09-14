@@ -21,7 +21,7 @@ steps:
     script: |
       for mdatabase in $(echo ${RINOA_MADB_LIST}) ; do
         mkdir -p ${mdatabase}
-        mariadb_dump --user=root --password"${MARIADB_ROOT_PASSWORD}" --databases ${madb} > ${mdatabase}/dump-$(date +%Y%m%d)_$(cat /proc/sys/kernel/random/uuid).sql
+        mariadb_dump --user=root --password"${MARIADB_ROOT_PASSWORD}" --databases ${madb} > ${mdatabase}/dump-$(date +%Y%m%d)-$(cat /proc/sys/kernel/random/uuid).sql
       done
 
   - name: db-backup-cleanup
