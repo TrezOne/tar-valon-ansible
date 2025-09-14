@@ -13,10 +13,6 @@ on:
       - 'main'
     paths:
       - 'app-configs/**'
-      - 'collections/**'
-      - 'group_vars/**'
-      - 'inventory/**'
-      - 'playbooks/**'
       - '!app-configs/rikku/homeassistant/**'
       - '!app-configs/rinoa/dagu/dags/**'
 
