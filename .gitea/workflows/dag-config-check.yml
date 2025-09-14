@@ -15,25 +15,63 @@ env:
   VAULT_TOKEN: ${{ secrets.VAULT_GITEA_TOKEN }}
 
 jobs:
-  validate:
+  validate-dags:
+    name: DAGU DAG(s) Validation
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout Repo
+        uses: actions/checkout@v4
+
+      - name: Gotify Notification
+        uses: eikendev/gotify-action@master
+        with:
+          gotify_api_base: '${{ secrets.GOTIFY_URL }}'
+          gotify_app_token: '${{ secrets.RUNNER_GOTIFY_TOKEN }}'
+          notification_title: 'GITEA: Dagu Validation'
+          notification_message: 'Setting up Ansible and Vault... 🏗️'
 
       - name: Install Ansible
         uses: alex-oleshkevich/setup-ansible@v1.0.1
         with:
           version: "11.4.0"
 
+      - name: Cache Ansible Galaxy Collections
+        uses: actions/cache@v3
+        with:
+          path: collections
+          key: ${{ runner.os }}-ansible-${{ hashFiles('./collections/requirements.yml') }}
+          restore-keys: |
+            ${{ runner.os }}-ansible-
+
       - name: Set up Vault CLI
         uses: eLco/setup-vault@v1
         with:
           vault_version: 1.18.0
 
+      - name: Cache pip
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements*.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-
+
       - name: Install hvac (Vault Python SDK)
         run: pip install hvac
 
-      - name: Render .yaml.j2 templates
+      - name: Gotify Notification
+        uses: eikendev/gotify-action@master
+        with:
+          gotify_api_base: '${{ secrets.GOTIFY_URL }}'
+          gotify_app_token: '${{ secrets.RUNNER_GOTIFY_TOKEN }}'
+          notification_title: 'GITEA: Dagu Validation'
+          notification_message: 'Ansible and Vault setups completed, starting Dagu validation... 🔬'
+
+      - name: Install dagu
+        run: |
+          curl -L https://raw.githubusercontent.com/dagu-org/dagu/main/scripts/installer.sh | bash
+
+      - name: Render DAG Jinja templates
         uses: dawidd6/action-ansible-playbook@v2
         with:
           directory: .
@@ -41,14 +79,41 @@ jobs:
           requirements: collections/requirements.yml
           playbook: playbooks/rinoa-render-dags.yml
 
-      - name: Install dagu
-        run: |
-          curl -L https://raw.githubusercontent.com/dagu-org/dagu/main/scripts/installer.sh | bash
-          dagu version
-
       - name: Validate DAGs
         run: |
           for dag in $(find ${DAGS_PATH} -type f -name "*.yaml" -a ! -name "*example*"); do
-            echo "===========Validating ${dag}==========="
+            echo -e "\n\n===========Validating ${dag}==========="
             dagu dry "${dag}"
           done
+          echo "exit_code=$status" >> $GITHUB_OUTPUT
+
+      - name: Gotify Notification
+        if: steps.validate-dags.outputs.exit_code == '0'
+        uses: eikendev/gotify-action@master
+        with:
+          gotify_api_base: '${{ secrets.GOTIFY_URL }}'
+          gotify_app_token: '${{ secrets.RUNNER_GOTIFY_TOKEN }}'
+          notification_title: 'GITEA: Dagu Validation'
+          notification_message: 'Dagu DAG validation passed! 🏁'
+
+      - name: Gotify Notification
+        if: steps.validate-dags.outputs.exit_code != '0'
+        uses: eikendev/gotify-action@master
+        with:
+          gotify_api_base: '${{ secrets.GOTIFY_URL }}'
+          gotify_app_token: '${{ secrets.RUNNER_GOTIFY_TOKEN }}'
+          notification_title: 'GITEA: Dagu Validation'
+          notification_message: 'Dagu DAG validation failed! 🚫'
+
+      - name: Write downstream trigger marker
+        if: steps.validate-dags.outputs.exit_code == '0'
+        run: |
+          echo "DAG validation completed at $(date -u)" > .dag-validation-complete
+
+      - name: Add/Commit Validation Trigger File
+        id: commit-readme
+        uses: EndBug/add-and-commit@v9
+        with:
+          add: ".dag-validation-complete"
+          default_author: ${{ github.actor }}
+          message: "chore: mark DAG validation complete"
