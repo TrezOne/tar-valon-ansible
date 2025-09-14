@@ -27,11 +27,18 @@
             | map(attribute='path')
             | map('relpath', template_base_path ~ '/' ~ inventory_hostname)
             | map('dirname')
-            | map('regex_replace', '^(.*)$', hostvars[inventory_hostname]['appdata_base_path'] ~ '/\1')
+            | map('regex_replace', '^(.*)$', appdata_base_path_map[inventory_hostname] ~ '/\1')
             | unique
             | list
           }}
+      vars:
+        appdata_base_path_map:
+          rinoa: "{{ hostvars['rinoa']['appdata_base_path'] }}"
+          rikku: "{{ hostvars['rikku']['appdata_base_path'] }}"
+          benedikta: "{{ hostvars['benedikta']['appdata_base_path'] }}"
       changed_when: false
+      delegate_to: localhost
+      run_once: true
 
 
   tasks:
