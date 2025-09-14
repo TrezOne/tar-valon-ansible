@@ -22,18 +22,28 @@
     - name: Pre-check Vault secrets in templates
       when: dag_templates | length > 0
       block:
-        - name: Find all Vault lookup expressions in templates
+        - name: Read each DAG template safely
+          ansible.builtin.slurp:
+            src: "{{ item }}"
+          loop: "{{ dag_templates }}"
+          register: slurped_templates
+
+        - name: Extract Vault keys from DAG templates
           ansible.builtin.set_fact:
             vault_keys: >-
               {{
-                dag_templates
-                | map('file', 'r')
-                | select('string')
+                slurped_templates.results
+                | map(attribute='content')
+                | map('b64decode')
                 | map('regex_findall',
                       "lookup\\('community.hashi_vault.vault_kv2_get',\\s*'[^']+',\\s*engine_mount_point='[^']+',\\s*url=[^,]+,\\s*token=[^\\)]+\\)\\['secret'\\]\\['([^']+)'\\]")
                 | sum(start=[])
               }}
-          when: dag_templates | length > 0
+
+        - name: Warn if any Vault keys might be missing
+          loop: "{{ vault_keys }}"
+          ansible.builtin.debug:
+            msg: "Vault key '{{ item }}' will be required by templates"
 
 
         - name: Warn if any Vault keys might be missing
