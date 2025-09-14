@@ -26,14 +26,15 @@
           ansible.builtin.set_fact:
             vault_keys: >-
               {{
-                (
-                  dag_templates
-                  | map('file', 'r')
-                  | map('regex_findall',
-                        "lookup\\('community.hashi_vault.vault_kv2_get',\\s*'[^']+',\\s*engine_mount_point='[^']+',\\s*url=[^,]+,\\s*token=[^\\)]+\\)\\['secret'\\]\\['([^']+)'\\]")
-                  | list
-                ) | default([])
+                dag_templates
+                | map('file', 'r')
+                | select('string')
+                | map('regex_findall',
+                      "lookup\\('community.hashi_vault.vault_kv2_get',\\s*'[^']+',\\s*engine_mount_point='[^']+',\\s*url=[^,]+,\\s*token=[^\\)]+\\)\\['secret'\\]\\['([^']+)'\\]")
+                | sum(start=[])
               }}
+          when: dag_templates | length > 0
+
 
         - name: Warn if any Vault keys might be missing
           loop: "{{ vault_keys }}"

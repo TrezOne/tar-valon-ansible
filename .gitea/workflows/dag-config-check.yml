@@ -49,6 +49,6 @@ jobs:
       - name: Validate DAGs
         run: |
           for dag in $(find ${DAGS_PATH} -type f -name "*.yaml" -a ! -name "*example*"); do
-            echo "Validating ${dag}..."
+            echo "========Validating ${dag}========"
             dagu dry "${dag}"
           done
