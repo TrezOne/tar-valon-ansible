@@ -10,30 +10,21 @@
     template_base_path: "{{ playbook_dir }}/../app-configs"
 
   pre_tasks:
-    - name: Find all files for each host (on localhost)
-      ansible.builtin.find:
+    - name: Gather files for all hosts (on localhost)
+      find:
         paths: "{{ template_base_path }}/{{ item }}"
         recurse: true
       loop: "{{ ansible_play_hosts }}"
       loop_control:
         loop_var: item
-      register: host_files_results
+      register: files_per_host
       delegate_to: localhost
       changed_when: false
 
-    - name: Set host_files fact for this host
-      set_fact:
-        host_files: >-
-          {{
-            host_files_results.results
-            | selectattr('item','equalto',inventory_hostname)
-            | map(attribute='files')
-            | first
-          }}
-      run_once: false
-
-    - name: Build list of unique destination directories per host
-      ansible.builtin.set_fact:
+  tasks:
+    - name: Deploy files to each host
+      vars:
+        host_files: "{{ files_per_host.results | selectattr('item','equalto',inventory_hostname) | map(attribute='files') | first }}"
         dest_dirs: >-
           {{
             host_files
@@ -44,39 +35,27 @@
             | unique
             | list
           }}
-      changed_when: false
-      run_once: false
+      block:
+        - name: Ensure destination directories exist
+          file:
+            path: "{{ item }}"
+            state: directory
+            mode: '0755'
+          loop: "{{ dest_dirs }}"
 
-  tasks:
-    - name: Ensure destination directories exist (unique set)
-      ansible.builtin.file:
-        path: "{{ item }}"
-        state: directory
-        mode: '0755'
-      loop: "{{ dest_dirs }}"
-      loop_control:
-        label: "{{ item }}"
+        - name: Deploy Jinja2 templates
+          template:
+            src: "{{ item.path }}"
+            dest: "{{ appdata_base_path }}/{{ item.path | relpath(template_base_path ~ '/' ~ inventory_hostname) | regex_replace('\.j2$', '') }}"
+            mode: '0644'
+          loop: "{{ host_files }}"
+          when: item.path.endswith('.j2')
 
-    - name: Deploy Jinja2 templates (skip unchanged)
-      ansible.builtin.template:
-        src: "{{ item.path }}"
-        dest: >-
-          {{ appdata_base_path }}/{{ item.path
-          | relpath(template_base_path ~ '/' ~ inventory_hostname)
-          | regex_replace('\.j2$', '') }}
-        mode: '0644'
-      loop: "{{ host_files }}"
-      loop_control:
-        label: "{{ item.path }}"
-      when: item.path.endswith('.j2')
-
-    - name: Deploy static files (skip unchanged)
-      ansible.builtin.copy:
-        src: "{{ item.path }}"
-        dest: "{{ appdata_base_path }}/{{ item.path | relpath(template_base_path ~ '/' ~ inventory_hostname) }}"
-        mode: '0644'
-        remote_src: false
-      loop: "{{ host_files }}"
-      loop_control:
-        label: "{{ item.path }}"
-      when: not item.path.endswith('.j2')
+        - name: Deploy static files
+          copy:
+            src: "{{ item.path }}"
+            dest: "{{ appdata_base_path }}/{{ item.path | relpath(template_base_path ~ '/' ~ inventory_hostname) }}"
+            mode: '0644'
+            remote_src: false
+          loop: "{{ host_files }}"
+          when: not item.path.endswith('.j2')
