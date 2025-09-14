@@ -15,8 +15,6 @@
         paths: "{{ template_base_path }}/{{ inventory_hostname }}"
         recurse: true
       register: host_files
-      delegate_to: localhost
-      run_once: true
       changed_when: false
 
     - name: Build list of unique destination directories
@@ -27,19 +25,11 @@
             | map(attribute='path')
             | map('relpath', template_base_path ~ '/' ~ inventory_hostname)
             | map('dirname')
-            | map('regex_replace', '^(.*)$', appdata_base_path_map[inventory_hostname] ~ '/\1')
+            | map('regex_replace', '^(.*)$', appdata_base_path ~ '/\1')
             | unique
             | list
           }}
-      vars:
-        appdata_base_path_map:
-          rinoa: "{{ hostvars['rinoa']['appdata_base_path'] }}"
-          rikku: "{{ hostvars['rikku']['appdata_base_path'] }}"
-          benedikta: "{{ hostvars['benedikta']['appdata_base_path'] }}"
       changed_when: false
-      delegate_to: localhost
-      run_once: true
-
 
   tasks:
     - name: Ensure destination directories exist (unique set)
@@ -50,6 +40,7 @@
       loop: "{{ dest_dirs }}"
       loop_control:
         label: "{{ item }}"
+      changed_when: false  # mark pre-existing directories as unchanged
 
     - name: Deploy Jinja2 templates (skip unchanged)
       ansible.builtin.template:
@@ -59,6 +50,7 @@
           | relpath(template_base_path ~ '/' ~ inventory_hostname)
           | regex_replace('\.j2$', '') }}
         mode: '0644'
+        force: no  # skip unchanged templates
       loop: "{{ host_files.files }}"
       loop_control:
         label: "{{ item.path }}"
@@ -72,6 +64,7 @@
           | relpath(template_base_path ~ '/' ~ inventory_hostname) }}
         mode: '0644'
         remote_src: false
+        force: no  # skip unchanged files
       loop: "{{ host_files.files }}"
       loop_control:
         label: "{{ item.path }}"
