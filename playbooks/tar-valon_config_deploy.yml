@@ -15,9 +15,8 @@
         paths: "{{ template_base_path }}/{{ inventory_hostname }}"
         recurse: true
       register: host_files
+      run_once: true   # can remain run_once, finds files once for all hosts
       delegate_to: localhost
-      run_once: true
-      changed_when: false
 
     - name: Build list of unique destination directories
       ansible.builtin.set_fact:
@@ -27,13 +26,12 @@
             | map(attribute='path')
             | map('relpath', template_base_path ~ '/' ~ inventory_hostname)
             | map('dirname')
-            | map('regex_replace', '^(.*)$', hostvars[inventory_hostname]['appdata_base_path'] ~ '/\\1')
+            | map('regex_replace', '^(.*)$', appdata_base_path ~ '/\\1')
             | unique
             | list
           }}
       changed_when: false
-      delegate_to: localhost
-      run_once: true
+      run_once: false
 
   tasks:
     - name: Ensure destination directories exist (unique set)
