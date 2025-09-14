@@ -10,19 +10,33 @@
     template_base_path: "{{ playbook_dir }}/../app-configs"
 
   pre_tasks:
-    - name: Find all files for this host
+    - name: Find all files for each host (on localhost)
       ansible.builtin.find:
-        paths: "{{ template_base_path }}/{{ inventory_hostname }}"
+        paths: "{{ template_base_path }}/{{ item }}"
         recurse: true
-      register: host_files
-      run_once: false    # per host
+      loop: "{{ ansible_play_hosts }}"
+      loop_control:
+        loop_var: item
+      register: host_files_results
+      delegate_to: localhost
       changed_when: false
+
+    - name: Set host_files fact for this host
+      set_fact:
+        host_files: >-
+          {{
+            host_files_results.results
+            | selectattr('item','equalto',inventory_hostname)
+            | map(attribute='files')
+            | first
+          }}
+      run_once: false
 
     - name: Build list of unique destination directories per host
       ansible.builtin.set_fact:
         dest_dirs: >-
           {{
-            host_files.files
+            host_files
             | map(attribute='path')
             | map('relpath', template_base_path ~ '/' ~ inventory_hostname)
             | map('dirname')
@@ -31,6 +45,7 @@
             | list
           }}
       changed_when: false
+      run_once: false
 
   tasks:
     - name: Ensure destination directories exist (unique set)
@@ -50,7 +65,7 @@
           | relpath(template_base_path ~ '/' ~ inventory_hostname)
           | regex_replace('\.j2$', '') }}
         mode: '0644'
-      loop: "{{ host_files.files }}"
+      loop: "{{ host_files }}"
       loop_control:
         label: "{{ item.path }}"
       when: item.path.endswith('.j2')
@@ -61,7 +76,7 @@
         dest: "{{ appdata_base_path }}/{{ item.path | relpath(template_base_path ~ '/' ~ inventory_hostname) }}"
         mode: '0644'
         remote_src: false
-      loop: "{{ host_files.files }}"
+      loop: "{{ host_files }}"
       loop_control:
         label: "{{ item.path }}"
       when: not item.path.endswith('.j2')
