@@ -117,3 +117,4 @@ jobs:
           add: ".dag-validation-complete"
           default_author: github_actor
           message: "chore: mark DAG validation complete"
+          push: true
