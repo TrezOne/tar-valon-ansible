@@ -44,6 +44,7 @@ jobs:
       - name: Install dagu
         run: |
           curl -L https://raw.githubusercontent.com/dagu-org/dagu/main/scripts/installer.sh | bash
+          dagu version
 
       - name: Validate DAGs
         run: |
