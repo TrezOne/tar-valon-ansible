@@ -77,7 +77,7 @@ jobs:
           directory: .
           vault_password: ${{ secrets.ANSIBLE_VAULT_PASSWORD }}
           requirements: collections/requirements.yml
-          playbook: playbooks/rinoa-render-dags.yml
+          playbook: rinoa-render-dags.yml
 
       - name: Validate DAGs
         run: |
