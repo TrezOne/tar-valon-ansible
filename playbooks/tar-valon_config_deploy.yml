@@ -27,11 +27,12 @@
             | map(attribute='path')
             | map('relpath', template_base_path ~ '/' ~ inventory_hostname)
             | map('dirname')
-            | map('regex_replace', '^(.*)$', appdata_base_path ~ '/\1')
+            | map('regex_replace', '^(.*)$', hostvars[inventory_hostname]['appdata_base_path'] ~ '/\1')
             | unique
             | list
           }}
       changed_when: false
+
 
   tasks:
     - name: Ensure destination directories exist (unique set)
