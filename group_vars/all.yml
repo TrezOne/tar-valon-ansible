@@ -1,6 +1,6 @@
 ---
 # Base path for all templates
-template_base_path: "{{ playbook_dir }}/app-configs"
+template_base_path: "{{ playbook_dir }} ~ '../app-configs'"
 # Vault server address
 vault_addr: "https://vault.trez.wtf"
 vault_token: !vault |
