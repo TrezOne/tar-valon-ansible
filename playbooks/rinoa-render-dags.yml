@@ -8,7 +8,7 @@
     # Hardcoded fallback for DAGs path
     dags_path: "{{ playbook_dir ~ '/../app-configs/rinoa/dagu/dags' }}"
     vault_addr: "{{ lookup('env', 'VAULT_ADDR') }}"
-    vault_token: "{{ lookup('env', 'VAULT_GITEA_TOKEN') }}"
+    vault_token: "{{ lookup('env', 'VAULT_TOKEN') }}"
 
   tasks:
     - name: Build list of DAG template files
