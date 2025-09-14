@@ -13,11 +13,12 @@ on:
       - 'main'
     paths:
       - 'app-configs/**'
-      - 'collections/**'
-      - 'group_vars/**'
-      - 'inventory/**'
       - '!app-configs/rikku/homeassistant/**'
       - '!app-configs/rinoa/dagu/dags/**'
+      - 'collections/**'
+      - 'group_vars/**'
+      - 'host_vars/**'
+      - 'inventory/**'
 
 env:
   TEA_VERSION: '0.10.1'
