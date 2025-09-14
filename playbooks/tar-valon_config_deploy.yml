@@ -6,6 +6,9 @@
     - benedikta
   gather_facts: false
 
+  vars:
+    template_base_path: "{{ playbook_dir }}/../app-configs"
+
   pre_tasks:
     - name: Find all files for this host
       ansible.builtin.find:
