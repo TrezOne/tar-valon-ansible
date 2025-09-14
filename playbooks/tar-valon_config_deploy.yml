@@ -10,29 +10,32 @@
     template_base_path: "{{ playbook_dir }}/../app-configs"
 
   pre_tasks:
-    - name: Find all files for this host
+    - name: Find all files for all hosts
       ansible.builtin.find:
-        paths: "{{ template_base_path }}/{{ inventory_hostname }}"
+        paths: "{{ template_base_path }}"
         recurse: true
-      register: host_files
+      register: all_files
+      delegate_to: localhost
+      run_once: true
       changed_when: false
 
-    - name: Build list of unique destination directories
+    - name: Filter files for this host and build unique destination directories
       ansible.builtin.set_fact:
+        host_files: "{{ all_files.files | selectattr('path', 'match', '^' + template_base_path + '/' + inventory_hostname) | list }}"
         dest_dirs: >-
           {{
-            host_files.files
+            host_files
             | map(attribute='path')
             | map('relpath', template_base_path ~ '/' ~ inventory_hostname)
             | map('dirname')
-            | map('regex_replace', '^(.*)$', appdata_base_path ~ '/\1')
+            | map('regex_replace', '^(.*)$', hostvars[inventory_hostname]['appdata_base_path'] ~ '/\1')
             | unique
             | list
           }}
       changed_when: false
 
   tasks:
-    - name: Ensure destination directories exist (unique set)
+    - name: Ensure destination directories exist
       ansible.builtin.file:
         path: "{{ item }}"
         state: directory
@@ -40,18 +43,18 @@
       loop: "{{ dest_dirs }}"
       loop_control:
         label: "{{ item }}"
-      changed_when: false  # mark pre-existing directories as unchanged
+      changed_when: false
 
     - name: Deploy Jinja2 templates (skip unchanged)
       ansible.builtin.template:
         src: "{{ item.path }}"
         dest: >-
-          {{ appdata_base_path }}/{{ item.path
+          {{ hostvars[inventory_hostname]['appdata_base_path'] }}/{{ item.path
           | relpath(template_base_path ~ '/' ~ inventory_hostname)
           | regex_replace('\.j2$', '') }}
         mode: '0644'
-        force: no  # skip unchanged templates
-      loop: "{{ host_files.files }}"
+        force: no
+      loop: "{{ host_files }}"
       loop_control:
         label: "{{ item.path }}"
       when: item.path.endswith('.j2')
@@ -60,12 +63,12 @@
       ansible.builtin.copy:
         src: "{{ item.path }}"
         dest: >-
-          {{ appdata_base_path }}/{{ item.path
+          {{ hostvars[inventory_hostname]['appdata_base_path'] }}/{{ item.path
           | relpath(template_base_path ~ '/' ~ inventory_hostname) }}
         mode: '0644'
         remote_src: false
-        force: no  # skip unchanged files
-      loop: "{{ host_files.files }}"
+        force: no
+      loop: "{{ host_files }}"
       loop_control:
         label: "{{ item.path }}"
       when: not item.path.endswith('.j2')
