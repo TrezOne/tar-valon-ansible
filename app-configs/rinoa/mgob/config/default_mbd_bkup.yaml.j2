@@ -25,7 +25,7 @@ smtp:
   port: 25
   username: {{ lookup('community.hashi_vault.vault_kv2_get', 'env', engine_mount_point='rinoa-docker', url=vault_addr, token=vault_token)['secret']['POSTAL_SMTP_AUTH_USER'] }}
   password: {{ lookup('community.hashi_vault.vault_kv2_get', 'env', engine_mount_point='rinoa-docker', url=vault_addr, token=vault_token)['secret']['POSTAL_SMTP_AUTH_PASSWORD'] }}
-  from: mnoreply@trez.wtf
+  from: noreply@trez.wtf
   to:
     - charish.patel@trez.wtf
   # 'true' to notify only on failures
