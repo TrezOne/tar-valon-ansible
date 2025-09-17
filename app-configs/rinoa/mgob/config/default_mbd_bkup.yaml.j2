@@ -1,0 +1,32 @@
+{% set vault_addr = 'https://vault.trez.wtf' %}
+{% set secrets_path = 'rinoa-docker/env' %}
+scheduler:
+  cron: "45 23 * * *" # run every day at 6:00 and 18:00 UTC
+  retention: 14 # Retains 14 local backups
+  timeout: 60 # Operation timeout: 60 minutes
+target:
+  uri: mongodb://root:{{ lookup('community.hashi_vault.vault_kv2_get', 'env', engine_mount_point='rinoa-docker', url=vault_addr, token=vault_token)['secret']['MONGO_INITDB_ROOT_PASSWORD'] }}@mongodb:27017/admin?replicaSet=rinoa
+  noGzip: false # Disable gzip compression (false means compression is enabled)
+
+retry:
+  attempts: 3 # number of retries
+  backoffFactor: 60 # backoff factor  * (2 ^ attemptCount) seconds
+
+validation:
+  database:
+    host: "mongodb"
+    port: 27017
+    noGzip: false
+    database: rocketchat # Database name for restore operation
+
+# Email notifications (optional)
+smtp:
+  server: postal-stmp
+  port: 25
+  username: {{ lookup('community.hashi_vault.vault_kv2_get', 'env', engine_mount_point='rinoa-docker', url=vault_addr, token=vault_token)['secret']['POSTAL_SMTP_AUTH_USER'] }}
+  password: {{ lookup('community.hashi_vault.vault_kv2_get', 'env', engine_mount_point='rinoa-docker', url=vault_addr, token=vault_token)['secret']['POSTAL_SMTP_AUTH_PASSWORD'] }}
+  from: noreply@trez.wtf
+  to:
+    - charish.patel@trez.wtf
+  # 'true' to notify only on failures
+  warnOnly: false
