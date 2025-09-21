@@ -175,3 +175,5 @@ cython_debug/
 
 # Ansible
 .ansible/
+
+**/.cache_ggshield
