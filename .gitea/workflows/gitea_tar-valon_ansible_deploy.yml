@@ -10,18 +10,19 @@ on:
   #  branches: main
   push:
     branches-ignore:
-      - 'main'
+      - "main"
     paths:
-      - 'app-configs/**'
-      - '!app-configs/rikku/homeassistant/**'
-      - '!app-configs/rinoa/dagu/dags/**'
-      - 'collections/**'
-      - 'group_vars/**'
-      - 'host_vars/**'
-      - 'inventory/**'
+      - "app-configs/**"
+      - "!app-configs/rikku/homeassistant/**"
+      - "!app-configs/rinoa/dagu/dags/**"
+      - "collections/**"
+      - "group_vars/**"
+      - "host_vars/**"
+      - "inventory/**"
+      - "!renovate.json"
 
 env:
-  TEA_VERSION: '0.10.1'
+  TEA_VERSION: "0.10.1"
   VAULT_ADDR: ${{ secrets.VAULT_ADDR }}
   VAULT_TOKEN: ${{ secrets.VAULT_GITEA_TOKEN }}
 
@@ -39,17 +40,17 @@ jobs:
       - name: Install tea CLI
         uses: supplypike/setup-bin@v4
         with:
-          uri: 'https://gitea.com/gitea/tea/releases/download/v${{ env.TEA_VERSION }}/tea-${{ env.TEA_VERSION }}-linux-amd64'
-          name: 'tea'
+          uri: "https://gitea.com/gitea/tea/releases/download/v${{ env.TEA_VERSION }}/tea-${{ env.TEA_VERSION }}-linux-amd64"
+          name: "tea"
           version: ${{ env.TEA_VERSION }}
 
       - name: Gotify Notification
         uses: eikendev/gotify-action@master
         with:
-          gotify_api_base: '${{ secrets.GOTIFY_URL }}'
-          gotify_app_token: '${{ secrets.RUNNER_GOTIFY_TOKEN }}'
-          notification_title: 'GITEA: PR Check'
-          notification_message: 'Checking for existing PR... 🔍'
+          gotify_api_base: "${{ secrets.GOTIFY_URL }}"
+          gotify_app_token: "${{ secrets.RUNNER_GOTIFY_TOKEN }}"
+          notification_title: "GITEA: PR Check"
+          notification_message: "Checking for existing PR... 🔍"
 
       - name: Check if open PR exists
         id: check-opened-pr-step
@@ -70,10 +71,10 @@ jobs:
       - name: Gotify Notification
         uses: eikendev/gotify-action@master
         with:
-          gotify_api_base: '${{ secrets.GOTIFY_URL }}'
-          gotify_app_token: '${{ secrets.RUNNER_GOTIFY_TOKEN }}'
-          notification_title: 'GITEA: PR Check'
-          notification_message: 'PR Created 🎟️'
+          gotify_api_base: "${{ secrets.GOTIFY_URL }}"
+          gotify_app_token: "${{ secrets.RUNNER_GOTIFY_TOKEN }}"
+          notification_title: "GITEA: PR Check"
+          notification_message: "PR Created 🎟️"
 
   ansible-dry-run:
     name: Ansible Dry Run
@@ -121,10 +122,10 @@ jobs:
       - name: Gotify Notification
         uses: eikendev/gotify-action@master
         with:
-          gotify_api_base: '${{ secrets.GOTIFY_URL }}'
-          gotify_app_token: '${{ secrets.RUNNER_GOTIFY_TOKEN }}'
-          notification_title: 'GITEA: Ansible Dry Run'
-          notification_message: 'Starting dry run for ${{ matrix.host }}...'
+          gotify_api_base: "${{ secrets.GOTIFY_URL }}"
+          gotify_app_token: "${{ secrets.RUNNER_GOTIFY_TOKEN }}"
+          notification_title: "GITEA: Ansible Dry Run"
+          notification_message: "Starting dry run for ${{ matrix.host }}..."
 
       - name: Run Ansible Dry Run
         uses: dawidd6/action-ansible-playbook@v3
@@ -142,10 +143,10 @@ jobs:
       - name: Gotify Notification
         uses: eikendev/gotify-action@master
         with:
-          gotify_api_base: '${{ secrets.GOTIFY_URL }}'
-          gotify_app_token: '${{ secrets.RUNNER_GOTIFY_TOKEN }}'
-          notification_title: 'GITEA: Ansible Dry Run'
-          notification_message: 'Dry run for ${{ matrix.host }} completed.'
+          gotify_api_base: "${{ secrets.GOTIFY_URL }}"
+          gotify_app_token: "${{ secrets.RUNNER_GOTIFY_TOKEN }}"
+          notification_title: "GITEA: Ansible Dry Run"
+          notification_message: "Dry run for ${{ matrix.host }} completed."
 
   pr-merge:
     name: PR Merge
@@ -158,8 +159,8 @@ jobs:
       - name: Install tea
         uses: supplypike/setup-bin@v4
         with:
-          uri: 'https://gitea.com/gitea/tea/releases/download/v${{ env.TEA_VERSION }}/tea-${{ env.TEA_VERSION }}-linux-amd64'
-          name: 'tea'
+          uri: "https://gitea.com/gitea/tea/releases/download/v${{ env.TEA_VERSION }}/tea-${{ env.TEA_VERSION }}-linux-amd64"
+          name: "tea"
           version: ${{ env.TEA_VERSION }}
 
       - name: PR Merge
@@ -174,10 +175,10 @@ jobs:
       - name: Gotify Notification
         uses: eikendev/gotify-action@master
         with:
-          gotify_api_base: '${{ secrets.GOTIFY_URL }}'
-          gotify_app_token: '${{ secrets.RUNNER_GOTIFY_TOKEN }}'
-          notification_title: 'GITEA: PR Merge Successful'
-          notification_message: 'PR #${{ steps.pr_merge.outputs.pr_index }} merged.'
+          gotify_api_base: "${{ secrets.GOTIFY_URL }}"
+          gotify_app_token: "${{ secrets.RUNNER_GOTIFY_TOKEN }}"
+          notification_title: "GITEA: PR Merge Successful"
+          notification_message: "PR #${{ steps.pr_merge.outputs.pr_index }} merged."
 
   ansible-config-deploy:
     name: Ansible Config Deployment
@@ -227,10 +228,10 @@ jobs:
       - name: Gotify Notification
         uses: eikendev/gotify-action@master
         with:
-          gotify_api_base: '${{ secrets.GOTIFY_URL }}'
-          gotify_app_token: '${{ secrets.RUNNER_GOTIFY_TOKEN }}'
-          notification_title: 'GITEA: Ansible Config Deployment'
-          notification_message: 'Deploying configs to ${{ matrix.host }}...'
+          gotify_api_base: "${{ secrets.GOTIFY_URL }}"
+          gotify_app_token: "${{ secrets.RUNNER_GOTIFY_TOKEN }}"
+          notification_title: "GITEA: Ansible Config Deployment"
+          notification_message: "Deploying configs to ${{ matrix.host }}..."
 
       - name: Run Ansible Config Deployment
         uses: dawidd6/action-ansible-playbook@v3
@@ -247,7 +248,7 @@ jobs:
       - name: Gotify Notification
         uses: eikendev/gotify-action@master
         with:
-          gotify_api_base: '${{ secrets.GOTIFY_URL }}'
-          gotify_app_token: '${{ secrets.RUNNER_GOTIFY_TOKEN }}'
-          notification_title: 'GITEA: Deployment Completed'
-          notification_message: 'Deployment to ${{ matrix.host }} completed successfully.'
+          gotify_api_base: "${{ secrets.GOTIFY_URL }}"
+          gotify_app_token: "${{ secrets.RUNNER_GOTIFY_TOKEN }}"
+          notification_title: "GITEA: Deployment Completed"
+          notification_message: "Deployment to ${{ matrix.host }} completed successfully."
