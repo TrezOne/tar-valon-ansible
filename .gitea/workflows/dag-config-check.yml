@@ -4,8 +4,7 @@ on:
   workflow_dispatch:
   push:
     paths:
-      - 'app-configs/rinoa/dagu/dags/**'
-      - '**/dag-config-check.yml'
+      - "app-configs/rinoa/dagu/dags/**"
     branches-ignore:
       - main
 
@@ -25,10 +24,10 @@ jobs:
       - name: Gotify Notification
         uses: eikendev/gotify-action@master
         with:
-          gotify_api_base: '${{ secrets.GOTIFY_URL }}'
-          gotify_app_token: '${{ secrets.RUNNER_GOTIFY_TOKEN }}'
-          notification_title: 'GITEA: Dagu Validation'
-          notification_message: 'Setting up Ansible and Vault... 🏗️'
+          gotify_api_base: "${{ secrets.GOTIFY_URL }}"
+          gotify_app_token: "${{ secrets.RUNNER_GOTIFY_TOKEN }}"
+          notification_title: "GITEA: Dagu Validation"
+          notification_message: "Setting up Ansible and Vault... 🏗️"
 
       - name: Install Ansible
         uses: alex-oleshkevich/setup-ansible@v1.0.1
@@ -62,10 +61,10 @@ jobs:
       - name: Gotify Notification
         uses: eikendev/gotify-action@master
         with:
-          gotify_api_base: '${{ secrets.GOTIFY_URL }}'
-          gotify_app_token: '${{ secrets.RUNNER_GOTIFY_TOKEN }}'
-          notification_title: 'GITEA: Dagu Validation'
-          notification_message: 'Ansible and Vault setups completed, starting Dagu validation... 🔬'
+          gotify_api_base: "${{ secrets.GOTIFY_URL }}"
+          gotify_app_token: "${{ secrets.RUNNER_GOTIFY_TOKEN }}"
+          notification_title: "GITEA: Dagu Validation"
+          notification_message: "Ansible and Vault setups completed, starting Dagu validation... 🔬"
 
       - name: Install dagu
         run: |
@@ -91,19 +90,19 @@ jobs:
         if: steps.validate-dags.outputs.exit_code == '0'
         uses: eikendev/gotify-action@master
         with:
-          gotify_api_base: '${{ secrets.GOTIFY_URL }}'
-          gotify_app_token: '${{ secrets.RUNNER_GOTIFY_TOKEN }}'
-          notification_title: 'GITEA: Dagu Validation'
-          notification_message: 'Dagu DAG validation passed! 🏁'
+          gotify_api_base: "${{ secrets.GOTIFY_URL }}"
+          gotify_app_token: "${{ secrets.RUNNER_GOTIFY_TOKEN }}"
+          notification_title: "GITEA: Dagu Validation"
+          notification_message: "Dagu DAG validation passed! 🏁"
 
       - name: Gotify Notification
         if: steps.validate-dags.outputs.exit_code != '0'
         uses: eikendev/gotify-action@master
         with:
-          gotify_api_base: '${{ secrets.GOTIFY_URL }}'
-          gotify_app_token: '${{ secrets.RUNNER_GOTIFY_TOKEN }}'
-          notification_title: 'GITEA: Dagu Validation'
-          notification_message: 'Dagu DAG validation failed! 🚫'
+          gotify_api_base: "${{ secrets.GOTIFY_URL }}"
+          gotify_app_token: "${{ secrets.RUNNER_GOTIFY_TOKEN }}"
+          notification_title: "GITEA: Dagu Validation"
+          notification_message: "Dagu DAG validation failed! 🚫"
 
       - name: Trigger Tar Valon Ansible Deploy
         run: |
