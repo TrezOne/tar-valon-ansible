@@ -4,10 +4,9 @@ on:
   workflow_dispatch:
   push:
     branches-ignore:
-      - 'main'
+      - "main"
     paths:
-      - 'app-configs/rikku/homeassistant/**'
-      - '**/homeassistant-config-check.yml'
+      - "app-configs/rikku/homeassistant/**"
 
 jobs:
   home-assistant-config-check:
@@ -23,8 +22,8 @@ jobs:
         with:
           gotify_api_base: ${{ secrets.GOTIFY_URL }}
           gotify_app_token: ${{ secrets.RUNNER_GOTIFY_TOKEN }}
-          notification_title: 'GITEA: Home Assistant Config Check'
-          notification_message: 'Starting config check...'
+          notification_title: "GITEA: Home Assistant Config Check"
+          notification_message: "Starting config check..."
 
       - name: 🚀 Run Home Assistant Configuration Check
         uses: https://git.trez.wtf/Trez.One/action-home-assistant@main
@@ -37,8 +36,8 @@ jobs:
         with:
           gotify_api_base: ${{ secrets.GOTIFY_URL }}
           gotify_app_token: ${{ secrets.RUNNER_GOTIFY_TOKEN }}
-          notification_title: 'GITEA: Home Assistant Config Check'
-          notification_message: '🚀 Config check done!'
+          notification_title: "GITEA: Home Assistant Config Check"
+          notification_message: "🚀 Config check done!"
 
       - name: Trigger Tar Valon Ansible Deploy
         run: |
