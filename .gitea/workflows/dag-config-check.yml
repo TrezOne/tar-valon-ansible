@@ -36,7 +36,7 @@ jobs:
           version: "11.4.0"
 
       - name: Cache Ansible Galaxy Collections
-        uses: actions/cache@v3
+        uses: actions/cache@9b0c1fce7a93df8e3bb8926b0d6e9d89e92f20a7 # v3.0.11
         with:
           path: collections
           key: ${{ runner.os }}-ansible-${{ hashFiles('./collections/requirements.yml') }}
