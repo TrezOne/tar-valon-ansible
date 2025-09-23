@@ -44,7 +44,7 @@ jobs:
             ${{ runner.os }}-ansible-
 
       - name: Set up Vault CLI
-        uses: eLco/setup-vault@v1
+        uses: eLco/setup-vault@5d0ddffdfca9650484ae1378dafc376a9ebcd15e # v1.0.3
         with:
           vault_version: 1.18.0
 
