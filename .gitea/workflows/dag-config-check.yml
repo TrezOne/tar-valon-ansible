@@ -10,7 +10,7 @@ on:
 
 env:
   DAGS_PATH: "app-configs/rinoa/dagu/dags"
-  VAULT_ADDR: ${{ secrets.VAULT_ADDR }}
+  VAULT_ADDR: ${{ secrets.TREZ_VAULT_ADDR }}
   VAULT_TOKEN: ${{ secrets.VAULT_GITEA_TOKEN }}
 
 jobs:
@@ -24,7 +24,7 @@ jobs:
       - name: Gotify Notification
         uses: eikendev/gotify-action@master
         with:
-          gotify_api_base: "${{ secrets.GOTIFY_URL }}"
+          gotify_api_base: "${{ secrets.RUNNER_GOTIFY_URL }}"
           gotify_app_token: "${{ secrets.RUNNER_GOTIFY_TOKEN }}"
           notification_title: "GITEA: Dagu Validation"
           notification_message: "Setting up Ansible and Vault... 🏗️"
@@ -61,7 +61,7 @@ jobs:
       - name: Gotify Notification
         uses: eikendev/gotify-action@master
         with:
-          gotify_api_base: "${{ secrets.GOTIFY_URL }}"
+          gotify_api_base: "${{ secrets.RUNNER_GOTIFY_URL }}"
           gotify_app_token: "${{ secrets.RUNNER_GOTIFY_TOKEN }}"
           notification_title: "GITEA: Dagu Validation"
           notification_message: "Ansible and Vault setups completed, starting Dagu validation... 🔬"
@@ -90,7 +90,7 @@ jobs:
         if: steps.validate-dags.outputs.exit_code == '0'
         uses: eikendev/gotify-action@master
         with:
-          gotify_api_base: "${{ secrets.GOTIFY_URL }}"
+          gotify_api_base: "${{ secrets.RUNNER_GOTIFY_URL }}"
           gotify_app_token: "${{ secrets.RUNNER_GOTIFY_TOKEN }}"
           notification_title: "GITEA: Dagu Validation"
           notification_message: "Dagu DAG validation passed! 🏁"
@@ -99,7 +99,7 @@ jobs:
         if: steps.validate-dags.outputs.exit_code != '0'
         uses: eikendev/gotify-action@master
         with:
-          gotify_api_base: "${{ secrets.GOTIFY_URL }}"
+          gotify_api_base: "${{ secrets.RUNNER_GOTIFY_URL }}"
           gotify_app_token: "${{ secrets.RUNNER_GOTIFY_TOKEN }}"
           notification_title: "GITEA: Dagu Validation"
           notification_message: "Dagu DAG validation failed! 🚫"

@@ -3,17 +3,17 @@ name: Auto-Unseal for Vault
 on:
   workflow_dispatch:
   schedule:
-    - cron: '30 5 * * *'
+    - cron: "30 5 * * *"
 
 env:
-  HC_VAULT_VERSION: '1.20.0'
+  HC_VAULT_VERSION: "1.20.0"
 
 jobs:
   auto-unseal:
     name: Unseal Vault
     runs-on: ubuntu-latest
     env:
-      VAULT_ADDR: ${{ secrets.VAULT_ADDR }}
+      VAULT_ADDR: ${{ secrets.TREZ_VAULT_ADDR }}
       VAULT_TOKEN: ${{ secrets.VAULT_GITEA_TOKEN }}
       VAULT_SHARDS: ${{ secrets.VAULT_UNSEAL_SHARDS }}
       VAULT_NAMESPACE: ""
@@ -21,10 +21,10 @@ jobs:
       - name: Vault Unseal Start
         uses: eikendev/gotify-action@master
         with:
-          gotify_api_base: '${{ secrets.GOTIFY_URL }}'
-          gotify_app_token: '${{ secrets.RUNNER_GOTIFY_TOKEN }}'
-          notification_title: 'GITEA: HC Vault @ Rinoa'
-          notification_message: 'Hashicorp Vault unsealing started... 🔐'
+          gotify_api_base: "${{ secrets.RUNNER_GOTIFY_URL }}"
+          gotify_app_token: "${{ secrets.RUNNER_GOTIFY_TOKEN }}"
+          notification_title: "GITEA: HC Vault @ Rinoa"
+          notification_message: "Hashicorp Vault unsealing started... 🔐"
 
       - name: Cache Vault install
         id: cache-vault
@@ -48,7 +48,7 @@ jobs:
       - name: Vault Unseal Completion
         uses: eikendev/gotify-action@master
         with:
-          gotify_api_base: '${{ secrets.GOTIFY_URL }}'
-          gotify_app_token: '${{ secrets.RUNNER_GOTIFY_TOKEN }}'
-          notification_title: 'GITEA: HC Vault @ Rinoa'
-          notification_message: 'Hashicorp Vault unsealed! 🔓'
+          gotify_api_base: "${{ secrets.RUNNER_GOTIFY_URL }}"
+          gotify_app_token: "${{ secrets.RUNNER_GOTIFY_TOKEN }}"
+          notification_title: "GITEA: HC Vault @ Rinoa"
+          notification_message: "Hashicorp Vault unsealed! 🔓"

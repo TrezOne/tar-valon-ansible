@@ -20,7 +20,7 @@ jobs:
       - name: Gotify Notification (start check)
         uses: eikendev/gotify-action@master
         with:
-          gotify_api_base: ${{ secrets.GOTIFY_URL }}
+          gotify_api_base: ${{ secrets.RUNNER_GOTIFY_URL }}
           gotify_app_token: ${{ secrets.RUNNER_GOTIFY_TOKEN }}
           notification_title: "GITEA: Home Assistant Config Check"
           notification_message: "Starting config check..."
@@ -34,7 +34,7 @@ jobs:
       - name: Gotify Notification (done)
         uses: eikendev/gotify-action@master
         with:
-          gotify_api_base: ${{ secrets.GOTIFY_URL }}
+          gotify_api_base: ${{ secrets.RUNNER_GOTIFY_URL }}
           gotify_app_token: ${{ secrets.RUNNER_GOTIFY_TOKEN }}
           notification_title: "GITEA: Home Assistant Config Check"
           notification_message: "🚀 Config check done!"
