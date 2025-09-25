@@ -30,7 +30,7 @@ jobs:
           notification_message: "Setting up Ansible and Vault... 🏗️"
 
       - name: Install Ansible
-        uses: alex-oleshkevich/setup-ansible@v1.0.1
+        uses: alex-oleshkevich/setup-ansible@f879ce3cf11a7315e130919a797526b0c6bfd272 # v1.0.1
         with:
           version: "11.4.0"
 
