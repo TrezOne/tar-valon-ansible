@@ -6,7 +6,7 @@ on:
     - cron: "30 5 * * *"
 
 env:
-  HC_VAULT_VERSION: "1.20.0"
+  HC_VAULT_VERSION: "1.20.4"
 
 jobs:
   auto-unseal:
