@@ -1,0 +1,1 @@
+{{ lookup('community.hashi_vault.vault_kv2_get', 'env', engine_mount_point='rinoa-docker', url=vault_addr, token=vault_token)['secret']['MONGODB_REPLICA_SET_KEY'] }}
