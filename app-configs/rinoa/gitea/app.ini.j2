@@ -115,7 +115,7 @@ DEFAULT_TRUST_MODEL = committer
 JWT_SECRET = {{ lookup('community.hashi_vault.vault_kv2_get', 'env', engine_mount_point='rinoa-docker', url=vault_addr, token=vault_token)['secret']['GITEA_OAUTH2_JWT_SECRET'] }}
 
 [ui]
-THEMES =
+THEMES = gitea-auto,catppuccin-blue-auto,catppuccin-flamingo-auto,catppuccin-green-auto,catppuccin-lavender-auto,catppuccin-mauve-auto,catppuccin-peach-auto,catppuccin-pink-auto,catppuccin-red-auto,catppuccin-rosewater-auto,catppuccin-sapphire-auto,catppuccin-sky-auto,catppuccin-teal-auto,catppuccin-yellow-auto,catppuccin-maroon-auto
 
 [actions]
 ENABLED = true
