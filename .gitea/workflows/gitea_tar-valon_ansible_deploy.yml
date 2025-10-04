@@ -49,7 +49,7 @@ jobs:
         with:
           gotify_api_base: "${{ secrets.RUNNER_GOTIFY_URL }}"
           gotify_app_token: "${{ secrets.RUNNER_GOTIFY_TOKEN }}"
-          notification_title: "GITEA: PR Check"
+          notification_title: "GITEA: PR Check @ Tar Valon"
           notification_message: "Checking for existing PR... 🔍"
 
       - name: Check if open PR exists
@@ -73,7 +73,7 @@ jobs:
         with:
           gotify_api_base: "${{ secrets.RUNNER_GOTIFY_URL }}"
           gotify_app_token: "${{ secrets.RUNNER_GOTIFY_TOKEN }}"
-          notification_title: "GITEA: PR Check"
+          notification_title: "GITEA: PR Check @ Tar Valon"
           notification_message: "PR Created 🎟️"
 
   ansible-dry-run:
