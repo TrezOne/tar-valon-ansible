@@ -190,7 +190,7 @@ service:
     metrics/hostmetrics:
       receivers: [hostmetrics]
       processors: [resourcedetection]
-      exporters: [otlp]
+      exporters: [otlp/nginx-logs]
 
     metrics/prometheus:
       receivers: [prometheus]
