@@ -10,12 +10,6 @@
     default_owner: "1000"
     default_group: "1000"
     default_mode: "0644"
-    # file_metadata should be defined in host_vars/<host>.yml:
-    # file_metadata:
-    #   "configs/serviceA/config.yaml":
-    #     owner: "999"
-    #     group: "999"
-    #     mode: "0640"
 
   pre_tasks:
     - name: Get remote user's UID and GID
@@ -90,9 +84,9 @@
 
     - name: Log computed deployment metadata
       ansible.builtin.debug:
-        msg: |
+        msg: >-
           Deployment plan:
-          {%- for f in deploy_files -%}
+          {% for f in deploy_files %}
           - src: {{ f.src }}
             dest: {{ f.dest }}
             owner: {{ f.owner }}
@@ -100,18 +94,21 @@
             mode: {{ f.mode }}
             become: {{ f.become }}
             template: {{ f.is_template }}
-          {%- endfor -%}
+          {% endfor %}
       run_once: true
 
-    - name: Print concise become: true list
+    - name: Print concise become true list
       ansible.builtin.debug:
-        msg: |
+        msg: >-
           Files requiring become=true:
-          {%- for f in deploy_files if f.become -%}
+          {% set found = false %}
+          {% for f in deploy_files if f.become %}
+          {% set found = true %}
           - {{ f.dest }} -> owner:{{ f.owner }}:{{ f.group }} mode:{{ f.mode }}
-          {%- else -%}
+          {% endfor %}
+          {% if not found %}
           (none)
-          {%- endfor -%}
+          {% endif %}
       run_once: true
 
   tasks:
@@ -119,7 +116,7 @@
       ansible.builtin.file:
         path: "{{ item }}"
         state: directory
-        mode: '0755'
+        mode: "0755"
       loop: "{{ dest_dirs }}"
       loop_control:
         label: "{{ item }}"
