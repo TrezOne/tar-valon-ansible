@@ -1,5 +1,5 @@
 ---
-- name: Deploy Docker Service Configurations (Optimized & Vault-ready)
+- name: Deploy Docker Service Configurations (Ownership-aware & verbose)
   hosts:
     - rinoa
     - rikku
@@ -7,11 +7,47 @@
   gather_facts: false
 
   vars:
-    # template_base_path and vault_addr from group_vars/all.yml
-    # appdata_base_path, secrets_path, vault_token_cleaned from host_vars/<host>.yml
+    default_owner: "1000"
+    default_group: "1000"
+    default_mode: "0644"
+    # file_metadata should be defined in host_vars/<host>.yml:
+    # file_metadata:
+    #   "configs/serviceA/config.yaml":
+    #     owner: "999"
+    #     group: "999"
+    #     mode: "0640"
 
   pre_tasks:
-    - name: Find all files for this host
+    - name: Get remote user's UID and GID
+      ansible.builtin.command: "id -u && id -g"
+      register: remote_user_info
+      changed_when: false
+
+    - name: Set remote user's UID and GID facts
+      ansible.builtin.set_fact:
+        remote_uid: "{{ remote_user_info.stdout_lines[0] | int }}"
+        remote_gid: "{{ remote_user_info.stdout_lines[1] | int }}"
+
+    - name: Annotate file metadata with become requirement
+      ansible.builtin.set_fact:
+        file_metadata_with_become: >-
+          {{
+            (file_metadata | default({})) | dict2items
+            | map('combine', {
+                'value': item.value | combine({
+                  'owner': (item.value.owner | default(default_owner) | string),
+                  'group': (item.value.group | default(default_group) | string),
+                  'mode':  (item.value.mode  | default(default_mode)  | string),
+                  'become': (
+                    ((item.value.owner | default(default_owner) | int) != remote_uid) or
+                    ((item.value.group | default(default_group) | int) != remote_gid)
+                  )
+                })
+              })
+            | items2dict
+          }}
+
+    - name: Find all files for this host (control node)
       ansible.builtin.find:
         paths: "{{ template_base_path }}/{{ inventory_hostname }}"
         recurse: true
@@ -34,8 +70,52 @@
           }}
       changed_when: false
 
+    - name: Build flat file deployment spec list
+      ansible.builtin.set_fact:
+        deploy_files: >-
+          {{
+            host_files.files
+            | map('extract', attribute='path')
+            | map('community.general.dict_kv', item => {
+                'src': item,
+                'dest': appdata_base_path ~ '/' ~ (item | relpath(template_base_path ~ '/' ~ inventory_hostname) | regex_replace('\.j2$', '')),
+                'owner': file_metadata_with_become[item | relpath(template_base_path ~ '/' ~ inventory_hostname)]?.owner | default(default_owner),
+                'group': file_metadata_with_become[item | relpath(template_base_path ~ '/' ~ inventory_hostname)]?.group | default(default_group),
+                'mode': file_metadata_with_become[item | relpath(template_base_path ~ '/' ~ inventory_hostname)]?.mode | default(default_mode),
+                'become': file_metadata_with_become[item | relpath(template_base_path ~ '/' ~ inventory_hostname)]?.become | default(false),
+                'is_template': item.endswith('.j2')
+              })
+            | list
+          }}
+
+    - name: Log computed deployment metadata
+      ansible.builtin.debug:
+        msg: |
+          Deployment plan:
+          {%- for f in deploy_files -%}
+          - src: {{ f.src }}
+            dest: {{ f.dest }}
+            owner: {{ f.owner }}
+            group: {{ f.group }}
+            mode: {{ f.mode }}
+            become: {{ f.become }}
+            template: {{ f.is_template }}
+          {%- endfor -%}
+      run_once: true
+
+    - name: Print concise become: true list
+      ansible.builtin.debug:
+        msg: |
+          Files requiring become=true:
+          {%- for f in deploy_files if f.become -%}
+          - {{ f.dest }} -> owner:{{ f.owner }}:{{ f.group }} mode:{{ f.mode }}
+          {%- else -%}
+          (none)
+          {%- endfor -%}
+      run_once: true
+
   tasks:
-    - name: Ensure destination directories exist (unique set)
+    - name: Ensure destination directories exist
       ansible.builtin.file:
         path: "{{ item }}"
         state: directory
@@ -44,28 +124,27 @@
       loop_control:
         label: "{{ item }}"
 
-    - name: Deploy Jinja2 templates (skip unchanged)
+    - name: Deploy template files
       ansible.builtin.template:
-        src: "{{ item.path }}"
-        dest: >-
-          {{ appdata_base_path }}/{{ item.path
-          | relpath(template_base_path ~ '/' ~ inventory_hostname)
-          | regex_replace('\.j2$', '') }}
-        mode: '0644'
-      loop: "{{ host_files.files }}"
+        src: "{{ item.src }}"
+        dest: "{{ item.dest }}"
+        owner: "{{ item.owner }}"
+        group: "{{ item.group }}"
+        mode: "{{ item.mode }}"
+      loop: "{{ deploy_files | selectattr('is_template') | list }}"
       loop_control:
-        label: "{{ item.path }}"
-      when: item.path.endswith('.j2')
+        label: "{{ item.src }}"
+      become: "{{ item.become }}"
 
-    - name: Deploy static files (skip unchanged)
+    - name: Deploy static files
       ansible.builtin.copy:
-        src: "{{ item.path }}"
-        dest: >-
-          {{ appdata_base_path }}/{{ item.path
-          | relpath(template_base_path ~ '/' ~ inventory_hostname) }}
-        mode: '0644'
+        src: "{{ item.src }}"
+        dest: "{{ item.dest }}"
+        owner: "{{ item.owner }}"
+        group: "{{ item.group }}"
+        mode: "{{ item.mode }}"
         remote_src: false
-      loop: "{{ host_files.files }}"
+      loop: "{{ deploy_files | rejectattr('is_template') | list }}"
       loop_control:
-        label: "{{ item.path }}"
-      when: not item.path.endswith('.j2')
+        label: "{{ item.src }}"
+      become: "{{ item.become }}"

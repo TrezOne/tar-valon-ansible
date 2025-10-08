@@ -1,2 +1,7 @@
 appdata_base_path: /home/charish/.docker/config/appdata
 secrets_path: rinoa-docker/env
+file_metadata:
+  "app-configs/rinoa/searxng/settings.yml":
+    owner: "977"
+    group: "977"
+    mode: "06400"
