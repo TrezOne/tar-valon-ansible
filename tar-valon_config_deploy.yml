@@ -104,7 +104,7 @@
           {% endfor %}
       run_once: true
 
-    - name: Print concise become: true list
+    - name: Print concise become true list
       ansible.builtin.debug:
         msg: >-
           Files requiring become=true:
