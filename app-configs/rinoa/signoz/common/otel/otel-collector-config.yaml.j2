@@ -104,7 +104,7 @@ receivers:
               refresh_interval: "30s"
         - job_name: "apprise-api"
           static_configs:
-            - targets: ["apprise:8000"]
+            - targets: ["apprise-api:8000"]
         - job_name: "authelia"
           static_configs:
             - targets: ["authelia:9959"]
@@ -113,13 +113,16 @@ receivers:
             - targets: ["cloudflared-agent-dockflared-tunnel:20119"]
         - job_name: "dawarich"
           static_configs:
-            - targets: ["dawarich-app:9394", "dawarich-sidekiq:9394"]
+            - targets: ["dawarich-app:9394"]
         - job_name: "gitea"
           static_configs:
             - targets: ["gitea:3000"]
         - job_name: "immich"
           static_configs:
             - targets: ["immich-server:8081", "immich-server:8082"]
+        - job_name: "mongodb"
+          static_configs:
+            - targets: ["mongodb-exporter:9216"]
         - job_name: "otel-collector"
           static_configs:
             - targets: ["localhost:8888"]
