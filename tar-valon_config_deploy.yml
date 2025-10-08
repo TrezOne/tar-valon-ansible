@@ -10,17 +10,24 @@
     default_owner: "1000"
     default_group: "1000"
     default_mode: "0644"
+    # file_metadata should be defined in host_vars/<host>.yml:
+    # file_metadata:
+    #   "configs/serviceA/config.yaml":
+    #     owner: "999"
+    #     group: "999"
+    #     mode: "0640"
 
   pre_tasks:
     - name: Get remote user's UID and GID
       ansible.builtin.command: "id -u && id -g"
       register: remote_user_info
       changed_when: false
+      ignore_errors: true
 
     - name: Set remote user's UID and GID facts
       ansible.builtin.set_fact:
-        remote_uid: "{{ remote_user_info.stdout_lines[0] | int }}"
-        remote_gid: "{{ remote_user_info.stdout_lines[1] | int }}"
+        remote_uid: "{{ remote_user_info.stdout_lines[0] | default(default_owner) | int }}"
+        remote_gid: "{{ remote_user_info.stdout_lines[1] | default(default_group) | int }}"
 
     - name: Annotate file metadata with become requirement
       ansible.builtin.set_fact:
@@ -97,7 +104,7 @@
           {% endfor %}
       run_once: true
 
-    - name: Print concise become true list
+    - name: Print concise become: true list
       ansible.builtin.debug:
         msg: >-
           Files requiring become=true:
