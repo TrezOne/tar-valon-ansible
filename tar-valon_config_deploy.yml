@@ -49,7 +49,7 @@
               })
             })
           }}
-      loop: "{{ file_metadata | dict2items }}"
+      loop: "{{ (file_metadata | default({})) | dict2items }}"
       loop_control:
         label: "{{ item.key }}"
 
