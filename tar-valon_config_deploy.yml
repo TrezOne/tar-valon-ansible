@@ -10,12 +10,6 @@
     default_owner: "1000"
     default_group: "1000"
     default_mode: "0644"
-    # file_metadata should be defined in host_vars/<host>.yml:
-    # file_metadata:
-    #   "configs/serviceA/config.yaml":
-    #     owner: "999"
-    #     group: "999"
-    #     mode: "0640"
 
   pre_tasks:
     - name: Get remote user's UID and GID
@@ -76,23 +70,23 @@
           }}
       changed_when: false
 
+    - name: Initialize deploy files list
+      ansible.builtin.set_fact:
+        deploy_files: []
+
     - name: Build flat file deployment spec list
       ansible.builtin.set_fact:
-        deploy_files: >-
-          {{
-            host_files.files
-            | map(attribute='path')
-            | map('community.general.dict_kv', item => {
-                'src': item,
-                'dest': appdata_base_path ~ '/' ~ (item | relpath(template_base_path ~ '/' ~ inventory_hostname) | regex_replace('\.j2$', '')),
-                'owner': file_metadata_with_become[item | relpath(template_base_path ~ '/' ~ inventory_hostname)]?.owner | default(default_owner),
-                'group': file_metadata_with_become[item | relpath(template_base_path ~ '/' ~ inventory_hostname)]?.group | default(default_group),
-                'mode': file_metadata_with_become[item | relpath(template_base_path ~ '/' ~ inventory_hostname)]?.mode | default(default_mode),
-                'become': file_metadata_with_become[item | relpath(template_base_path ~ '/' ~ inventory_hostname)]?.become | default(false),
-                'is_template': item.endswith('.j2')
-              })
-            | list
-          }}
+        deploy_files: "{{ deploy_files + [ {
+          'src': item.path,
+          'dest': appdata_base_path ~ '/' ~ (item.path | relpath(template_base_path ~ '/' ~ inventory_hostname) | regex_replace('\\.j2$', '')),
+          'owner': (file_metadata_with_become.get(item.path | relpath(template_base_path ~ '/' ~ inventory_hostname), {}).get('owner', default_owner)) | string,
+          'group': (file_metadata_with_become.get(item.path | relpath(template_base_path ~ '/' ~ inventory_hostname), {}).get('group', default_group)) | string,
+          'mode': (file_metadata_with_become.get(item.path | relpath(template_base_path ~ '/' ~ inventory_hostname), {}).get('mode', default_mode)) | string,
+          'become': (file_metadata_with_become.get(item.path | relpath(template_base_path ~ '/' ~ inventory_hostname), {}).get('become', false)) | bool,
+          'is_template': item.path.endswith('.j2') } ] }}"
+      loop: "{{ host_files.files }}"
+      loop_control:
+        label: "{{ item.path }}"
 
     - name: Log computed deployment metadata
       ansible.builtin.debug:
