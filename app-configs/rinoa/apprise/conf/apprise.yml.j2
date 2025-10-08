@@ -1,6 +1,5 @@
 {% set vault_addr = 'https://vault.trez.wtf' %}
 {% set secrets_path = 'rinoa-docker/env' %}
-
 urls:
   - gotify://gotify/{{ lookup('community.hashi_vault.vault_kv2_get', 'env', engine_mount_point='rinoa-docker', url=vault_addr, token=vault_token)['secret']['APPRISE_GOTIFY_TOKEN'] }}
   - hassio://192.168.1.252/{{ lookup('community.hashi_vault.vault_kv2_get', 'env', engine_mount_point='rinoa-docker', url=vault_addr, token=vault_token)['secret']['APPRISE_HA_TOKEN'] }}
