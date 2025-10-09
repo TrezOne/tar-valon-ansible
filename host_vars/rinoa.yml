@@ -1,15 +1,22 @@
 appdata_base_path: /home/charish/.docker/config/appdata
+ansible_become_password: !vault |
+  $ANSIBLE_VAULT;1.1;AES256
+  33393031336537653965343539636434613066326131653737396561653031336665633430353837
+  3166363261623634363162626161633831316539643339620a326538663930396335646631356335
+  39643539313531646566353034313734646432626462646530303762323939613833663237316631
+  3134383462306432630a626163356437336331356339353332613265366564323234613732626331
+  64333464306531303163376566393065643136633165373364373733323838616437
 secrets_path: rinoa-docker/env
 file_metadata:
-  "app-configs/rinoa/mongodb/config/keyfile.j2":
+  "mongodb/config/keyfile.j2":
     owner: "999"
     group: "999"
     mode: "0600"
-  "app-configs/rinoa/searxng/settings.yml.j2":
+  "searxng/settings.yml.j2":
     owner: "977"
     group: "977"
     mode: "0644"
-  "app-configs/rinoa/searxng/uwsgi.ini.j2":
+  "searxng/uwsgi.ini.j2":
     owner: "977"
     group: "977"
     mode: "0644"

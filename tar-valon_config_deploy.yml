@@ -5,6 +5,8 @@
     - rikku
     - benedikta
   gather_facts: false
+  become: true
+  become_method: sudo
 
   vars:
     default_owner: "1000"
@@ -12,6 +14,11 @@
     default_mode: "0644"
 
   pre_tasks:
+    - name: Load host-specific vaulted variables if they exist
+      ansible.builtin.include_vars:
+        file: "host_vars/{{ inventory_hostname }}_vault.yml"
+      ignore_errors: true
+
     - name: Get remote user's UID and GID
       ansible.builtin.command: "id -u && id -g"
       register: remote_user_info
