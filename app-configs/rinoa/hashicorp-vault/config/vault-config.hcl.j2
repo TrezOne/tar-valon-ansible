@@ -2,10 +2,6 @@ ui = true
 disable_clustering = true
 log_level = "debug"
 api_addr = "http://127.0.0.1:8200"
-// storage "raft" {
-//   path = "/path/to/raft/data"
-//   node_id = "raft_node_id"
-// }
 
 storage "s3" {
     endpoint = "minio:9000"
