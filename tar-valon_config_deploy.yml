@@ -90,21 +90,6 @@
       loop_control:
         label: "{{ item.path }}"
 
-    - name: Log computed deployment metadata
-      ansible.builtin.debug:
-        msg: >-
-          Deployment plan:
-          {% for f in deploy_files %}
-          - src: {{ f.src }}
-            dest: {{ f.dest }}
-            owner: {{ f.owner }}
-            group: {{ f.group }}
-            mode: {{ f.mode }}
-            become: {{ f.become }}
-            template: {{ f.is_template }}
-          {% endfor %}
-      run_once: true
-
     - name: Print concise become list
       ansible.builtin.debug:
         msg: >-
