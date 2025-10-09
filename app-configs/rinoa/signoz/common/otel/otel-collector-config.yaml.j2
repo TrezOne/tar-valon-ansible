@@ -100,7 +100,7 @@ receivers:
       scrape_configs:
         - job_name: "rinoa-containers"
           docker_sd_configs:
-            - host: unix:///var/run/docker.sock
+            - host: tcp://dockerproxy:2375
               refresh_interval: "30s"
         - job_name: "apprise-api"
           static_configs:
