@@ -229,6 +229,7 @@ jobs:
           options: |
             --inventory inventory/hosts.yml
             --limit ${{ matrix.host }}
+            --ask-become-pass
 
       - name: Gotify Notification
         uses: eikendev/gotify-action@master
