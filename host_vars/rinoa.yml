@@ -1,15 +1,15 @@
 appdata_base_path: /home/charish/.docker/config/appdata
 secrets_path: rinoa-docker/env
 file_metadata:
-  "app-configs/rinoa/mongodb/config/keyfile.j2":
+  "mongodb/config/keyfile.j2":
     owner: "999"
     group: "999"
     mode: "0600"
-  "app-configs/rinoa/searxng/settings.yml.j2":
+  "searxng/settings.yml.j2":
     owner: "977"
     group: "977"
     mode: "0644"
-  "app-configs/rinoa/searxng/uwsgi.ini.j2":
+  "searxng/uwsgi.ini.j2":
     owner: "977"
     group: "977"
     mode: "0644"
