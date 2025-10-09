@@ -21,10 +21,14 @@ containers:
     action_keywords:
       - restart:
           regex: 'Failed to lift app: Sails is taking too long to load.$'
+  searxng:
+    action_keywords:
+      - restart:
+          regex: 'Traceback \(most recent call last\)'
   scrutiny:
     action_keywords:
       - restart:
-          regex: '^s6-.*: fatal.*$'
+          regex: 's6-.*: fatal.*'
   swag:
     action_keywords:
       - restart:
