@@ -8,6 +8,10 @@ ansible_become_password: !vault |
   64333464306531303163376566393065643136633165373364373733323838616437
 secrets_path: rinoa-docker/env
 file_metadata:
+  "hashicorp-vault/config/vault-config.hcl.j2":
+    owner: "100"
+    group: "1000"
+    mode: "0644"
   "mongodb/config/keyfile.j2":
     owner: "999"
     group: "999"
