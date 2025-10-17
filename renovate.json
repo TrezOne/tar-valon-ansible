@@ -1,4 +1,8 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": ["local>Trez/renovate-config"]
+  "extends": ["local>Trez/renovate-config"],
+  "enabledManagers": [
+    "ansible",
+    "ansible-galaxy"
+  ]
 }
