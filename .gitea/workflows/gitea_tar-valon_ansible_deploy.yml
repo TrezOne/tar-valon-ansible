@@ -22,7 +22,8 @@ on:
       - "!renovate.json"
 
 env:
-  TEA_VERSION: "0.10.1"
+  TEA_VERSION: "0.11.1"
+  VAULT_VERSION: "1.21.0"
   VAULT_ADDR: ${{ secrets.TREZ_VAULT_ADDR }}
   VAULT_TOKEN: ${{ secrets.VAULT_GITEA_TOKEN }}
 
@@ -90,8 +91,8 @@ jobs:
 
       - name: Set up Vault CLI
         run: |
-          curl -sS -O https://releases.hashicorp.com/vault/${{ inputs.HC_VAULT_VERSION }}/vault_${{ inputs.HC_VAULT_VERSION }}_linux_amd64.zip
-          unzip -u vault_${{ inputs.HC_VAULT_VERSION }}_linux_amd64.zip -d .
+          curl -sS -O https://releases.hashicorp.com/vault/${{ env.VAULT_VERSION }}/vault_${{ env.VAULT_VERSION }}_linux_amd64.zip
+          unzip -u vault_${{ env.VAULT_VERSION }}_linux_amd64.zip -d .
           chmod +x vault
           mv vault /usr/local/bin
 
