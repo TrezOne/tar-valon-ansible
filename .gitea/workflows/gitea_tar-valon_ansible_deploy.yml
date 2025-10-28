@@ -22,7 +22,7 @@ on:
       - "!renovate.json"
 
 env:
-  TEA_VERSION: "0.11.1"
+  TEA_VERSION: "0.10.1"
   VAULT_VERSION: "1.21.0"
   VAULT_ADDR: ${{ secrets.TREZ_VAULT_ADDR }}
   VAULT_TOKEN: ${{ secrets.VAULT_GITEA_TOKEN }}
