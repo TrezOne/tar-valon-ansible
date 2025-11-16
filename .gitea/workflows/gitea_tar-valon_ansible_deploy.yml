@@ -39,7 +39,7 @@ jobs:
           fetch-depth: 1
 
       - name: Gotify Notification
-        uses: eikendev/gotify-action@master
+        uses: eikendev/gotify-action@0.0.3
         with:
           gotify_api_base: "${{ secrets.RUNNER_GOTIFY_URL }}"
           gotify_app_token: "${{ secrets.RUNNER_GOTIFY_TOKEN }}"
@@ -55,7 +55,7 @@ jobs:
           assignee: ${{ github.actor }}
 
       - name: Gotify Notification
-        uses: eikendev/gotify-action@master
+        uses: eikendev/gotify-action@0.0.3
         with:
           gotify_api_base: "${{ secrets.RUNNER_GOTIFY_URL }}"
           gotify_app_token: "${{ secrets.RUNNER_GOTIFY_TOKEN }}"
@@ -108,7 +108,7 @@ jobs:
         run: pip install hvac
 
       - name: Gotify Notification
-        uses: eikendev/gotify-action@master
+        uses: eikendev/gotify-action@0.0.3
         with:
           gotify_api_base: "${{ secrets.RUNNER_GOTIFY_URL }}"
           gotify_app_token: "${{ secrets.RUNNER_GOTIFY_TOKEN }}"
@@ -129,7 +129,7 @@ jobs:
             --check
 
       - name: Gotify Notification
-        uses: eikendev/gotify-action@master
+        uses: eikendev/gotify-action@0.0.3
         with:
           gotify_api_base: "${{ secrets.RUNNER_GOTIFY_URL }}"
           gotify_app_token: "${{ secrets.RUNNER_GOTIFY_TOKEN }}"
@@ -161,7 +161,7 @@ jobs:
           echo "pr_index=${pr_index}" >> $GITHUB_OUTPUT
 
       - name: Gotify Notification
-        uses: eikendev/gotify-action@master
+        uses: eikendev/gotify-action@0.0.3
         with:
           gotify_api_base: "${{ secrets.RUNNER_GOTIFY_URL }}"
           gotify_app_token: "${{ secrets.RUNNER_GOTIFY_TOKEN }}"
@@ -214,7 +214,7 @@ jobs:
         run: pip install hvac
 
       - name: Gotify Notification
-        uses: eikendev/gotify-action@master
+        uses: eikendev/gotify-action@0.0.3
         with:
           gotify_api_base: "${{ secrets.RUNNER_GOTIFY_URL }}"
           gotify_app_token: "${{ secrets.RUNNER_GOTIFY_TOKEN }}"
@@ -234,7 +234,7 @@ jobs:
             --limit ${{ matrix.host }}
 
       - name: Gotify Notification
-        uses: eikendev/gotify-action@master
+        uses: eikendev/gotify-action@0.0.3
         with:
           gotify_api_base: "${{ secrets.RUNNER_GOTIFY_URL }}"
           gotify_app_token: "${{ secrets.RUNNER_GOTIFY_TOKEN }}"

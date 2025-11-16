@@ -18,7 +18,7 @@ jobs:
         uses: actions/checkout@08eba0b27e820071cde6df949e0beb9ba4906955 # v4.3.0
 
       - name: Gotify Notification (start check)
-        uses: eikendev/gotify-action@master
+        uses: eikendev/gotify-action@0.0.3
         with:
           gotify_api_base: ${{ secrets.RUNNER_GOTIFY_URL }}
           gotify_app_token: ${{ secrets.RUNNER_GOTIFY_TOKEN }}
@@ -32,7 +32,7 @@ jobs:
           version: "stable"
 
       - name: Gotify Notification (done)
-        uses: eikendev/gotify-action@master
+        uses: eikendev/gotify-action@0.0.3
         with:
           gotify_api_base: ${{ secrets.RUNNER_GOTIFY_URL }}
           gotify_app_token: ${{ secrets.RUNNER_GOTIFY_TOKEN }}

@@ -19,7 +19,7 @@ jobs:
       VAULT_NAMESPACE: ""
     steps:
       - name: Vault Unseal Start
-        uses: eikendev/gotify-action@master
+        uses: eikendev/gotify-action@0.0.3
         with:
           gotify_api_base: "${{ secrets.RUNNER_GOTIFY_URL }}"
           gotify_app_token: "${{ secrets.RUNNER_GOTIFY_TOKEN }}"
@@ -46,7 +46,7 @@ jobs:
           done
 
       - name: Vault Unseal Completion
-        uses: eikendev/gotify-action@master
+        uses: eikendev/gotify-action@0.0.3
         with:
           gotify_api_base: "${{ secrets.RUNNER_GOTIFY_URL }}"
           gotify_app_token: "${{ secrets.RUNNER_GOTIFY_TOKEN }}"
