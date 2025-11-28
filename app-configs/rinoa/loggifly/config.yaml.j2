@@ -1,10 +1,10 @@
 {% set vault_addr = 'https://vault.trez.wtf' %}
 {% set secrets_path = 'rinoa-docker/env' %}
 containers:
-  adguard:
-    action_keywords:
-      - restart:
-          regex: '\[error\] dnsproxy.*timeout'
+  # adguard:
+  #   action_keywords:
+  #     - restart:
+  #         regex: '\[error\] dnsproxy.*timeout'
   ghost_blog:
     action_keywords:
       - restart:
