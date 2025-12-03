@@ -68,7 +68,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        host: [rinoa, rikku, benedikta]
+        host: [rinoa, rikku, benedikta, ultima]
     env:
       VAULT_ADDR: ${{ secrets.TREZ_VAULT_ADDR }}
       VAULT_TOKEN: ${{ secrets.VAULT_GITEA_TOKEN }}
@@ -174,7 +174,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        host: [rinoa, rikku, benedikta]
+        host: [rinoa, rikku, benedikta, ultima]
     env:
       VAULT_ADDR: ${{ secrets.TREZ_VAULT_ADDR }}
       VAULT_TOKEN: ${{ secrets.VAULT_GITEA_TOKEN }}
