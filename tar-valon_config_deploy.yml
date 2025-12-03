@@ -4,6 +4,7 @@
     - rinoa
     - rikku
     - benedikta
+    - ultima
   gather_facts: false
   become: true
   become_method: sudo

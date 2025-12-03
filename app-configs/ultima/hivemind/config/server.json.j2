@@ -1,0 +1,49 @@
+{
+    "binarize": true,
+    "allowed_encodings": [
+        "JSON-B64",
+        "JSON-URLSAFE-B64",
+        "JSON-B91",
+        "JSON-Z85B",
+        "JSON-Z85P",
+        "JSON-B32",
+        "JSON-HEX"
+    ],
+    "allowed_ciphers": [
+        "CHACHA20-POLY1305",
+        "AES-GCM"
+    ],
+    "agent_protocol": {
+        "module": "hivemind-ovos-agent-plugin",
+        "hivemind-ovos-agent-plugin": {
+            "host": "127.0.0.1",
+            "port": 8181
+        }
+    },
+    "binary_protocol": {
+        "module": null
+    },
+    "network_protocol": {
+        "hivemind-websocket-plugin": {
+            "host": "0.0.0.0",
+            "port": 5678,
+            "ssl": false,
+            "cert_dir": "/home/hivemind/.local/share/hivemind",
+            "cert_name": "hivemind"
+        },
+        "hivemind-http-plugin": {
+            "host": "0.0.0.0",
+            "port": 5679,
+            "ssl": false,
+            "cert_dir": "/home/hivemind/.local/share/hivemind",
+            "cert_name": "hivemind"
+        }
+    },
+    "database": {
+        "module": "hivemind-json-db-plugin",
+        "hivemind-json-db-plugin": {
+            "name": "clients",
+            "subfolder": "hivemind-core"
+        }
+    }
+}
