@@ -27,17 +27,6 @@
 
   "sources": [
     {
-      "type": "spotify",
-      "enabled": true,
-      "name": "spotifySource",
-      "clients": ["lastFmClient", "ListenBrainzClient", "malojaClient"],
-      "data": {
-        "clientId": "{{ lookup('community.hashi_vault.vault_kv2_get', 'env', engine_mount_point='rinoa-docker', url=vault_addr, token=vault_token)['secret']['YOUR_SPOTIFY_ID'] }}",
-        "clientSecret": "{{ lookup('community.hashi_vault.vault_kv2_get', 'env', engine_mount_point='rinoa-docker', url=vault_addr, token=vault_token)['secret']['YOUR_SPOTIFY_SECRET'] }}",
-        "redirectUri": "https://scrobble.trez.wtf/callback"
-      }
-    },
-    {
       "type": "lastfm",
       "enabled": true,
       "name": "lastfmSource",

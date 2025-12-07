@@ -1,5 +1,6 @@
 {
   "binarize": true,
+
   "allowed_encodings": [
     "JSON-B64",
     "JSON-URLSAFE-B64",
@@ -9,10 +10,12 @@
     "JSON-B32",
     "JSON-HEX"
   ],
+
   "allowed_ciphers": [
     "CHACHA20-POLY1305",
     "AES-GCM"
   ],
+
   "agent_protocol": {
     "module": "hivemind-ovos-agent-plugin",
     "hivemind-ovos-agent-plugin": {
@@ -20,30 +23,10 @@
       "port": 8181
     }
   },
+
   "binary_protocol": {
   "module": "hivemind-audio-binary-protocol-plugin",
-  "hivemind-audio-binary-protocol-plugin": {
-      "stt": {
-        "module": "ovos-stt-plugin-server",
-        "ovos-stt-plugin-server": {}
-      },
-      "tts": {
-        "module": "ovos-tts-plugin-server",
-        "ovos-tts-plugin-server": {}
-      },
-      "vad": {
-        "module": "ovos-vad-plugin-silero",
-        "ovos-vad-plugin-silero": {}
-      },
-      "wake_word": "hey_benedikta",
-      "hotwords": {
-        "hey_benedikta": {
-          "module": "ovos-ww-plugin-precise-lite",
-          "model": "https://github.com/OpenVoiceOS/precise-lite-models/raw/master/wakewords/en/hey_mycroft.tflite"
-        }
-      }
-    }
-  },
+  "hivemind-audio-binary-protocol-plugin": {},
   "network_protocol": {
     "hivemind-websocket-plugin": {
       "host": "0.0.0.0",
@@ -60,6 +43,7 @@
       "cert_name": "hivemind"
     }
   },
+
   "database": {
     "module": "hivemind-json-db-plugin",
     "hivemind-json-db-plugin": {
