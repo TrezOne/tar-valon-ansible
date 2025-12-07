@@ -25,38 +25,8 @@
   },
 
   "binary_protocol": {
-    "module": "hivemind-audio-binary-protocol-plugin",
-    "hivemind-audio-binary-protocol-plugin": {
-
-      "stt": {
-        "module": "ovos-stt-plugin-fasterwhisper",
-        "ovos-stt-plugin-fasterwhisper": {
-          "model": "base.en"
-        }
-      },
-
-      "tts": {
-        "module": "ovos-tts-plugin-piper",
-        "ovos-tts-plugin-piper": {
-          "voice": "alba-medium"
-        }
-      },
-
-      "vad": {
-        "module": "ovos-vad-plugin-silero",
-        "ovos-vad-plugin-silero": {}
-      },
-
-      "wake_word": "hey_benedikta",
-      "hotwords": {
-        "hey_benedikta": {
-          "module": "ovos-ww-plugin-precise-lite",
-          "model": "https://github.com/OpenVoiceOS/precise-lite-models/raw/master/wakewords/en/hey_mycroft.tflite"
-        }
-      }
-    }
-  },
-
+  "module": "hivemind-audio-binary-protocol-plugin",
+  "hivemind-audio-binary-protocol-plugin": {},
   "network_protocol": {
     "hivemind-websocket-plugin": {
       "host": "0.0.0.0",
