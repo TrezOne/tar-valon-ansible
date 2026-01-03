@@ -1,2 +1,2 @@
-appdata_base_path: /home/ovos/.config/docker
+appdata_base_path: /home/charish/.config/docker
 secrets_path: benedikta-docker/env
