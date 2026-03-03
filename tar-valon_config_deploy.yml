@@ -1,9 +1,9 @@
 ---
 - name: Deploy Docker Service Configurations (Ownership-aware & verbose)
   hosts:
-    - rinoa
+    - lunafreya
     - rikku
-    - benedikta
+    - rinoa
     - ultima
   gather_facts: false
   become: true

@@ -1,0 +1,84 @@
+# otel_collector.yaml
+
+receivers:
+  # ────────────────────────────────────────────────────────────────
+  # 1) Host log collection
+  # ────────────────────────────────────────────────────────────────
+  filelog:
+    # Optional: give the receiver a human‑readable name
+    name: host_logs
+    # Paths to monitor – adjust glob patterns as needed
+    include:
+      - /var/log/*.log
+      - /var/log/syslog
+      - /var/log/messages
+    # Optional: skip log files that match these patterns
+    exclude: []
+    # Optional: start reading from the beginning of the file
+    start_at: beginning
+    # Optional: decode JSON logs if they are JSON‑formatted
+    # json:
+    #   keys: [timestamp, level, msg]
+    #   timestamp_key: timestamp
+    #   timestamp_format: RFC3339
+    # Optional: throttle log ingestion
+    # throttle:
+    #   max_per_second: 1000
+    # Optional: keep track of processed offsets
+    # cache:
+    #   file: /var/log/filelog_cache.json
+
+  # ────────────────────────────────────────────────────────────────
+  # 2) Docker container log collection
+  # ────────────────────────────────────────────────────────────────
+  docker:
+    # Connect to the local Docker daemon
+    host: unix:///var/run/docker.sock
+    # By default, the Docker receiver pulls container metrics, logs, and health‑checks.
+    # If you only need logs, set the following to true (enabled by default):
+    logs: true
+    # Optional: enable or disable container log collection for specific containers
+    # include: [ "my-app", "api-service" ]
+    # exclude: [ "debug-container" ]
+    # Optional: set the maximum number of log files to keep open
+    # max_open_files: 100
+
+processors:
+  # ────────────────────────────────────────────────────────────────
+  # 1) Batch processor (recommended for all pipelines)
+  # ────────────────────────────────────────────────────────────────
+  batch:
+    timeout: 5s
+    send_batch_size: 5000
+
+  # ────────────────────────────────────────────────────────────────
+  # 2) Optional resource processor – add host name to every log record
+  # ────────────────────────────────────────────────────────────────
+  resource:
+    attributes:
+      - key: host.name
+        from_env: HOSTNAME
+        action: upsert
+      - key: service.namespace
+        value: host-logs
+        action: upsert
+
+exporters:
+  # ────────────────────────────────────────────────────────────────
+  # 1) OTLP exporter – sends logs to the central collector
+  # ────────────────────────────────────────────────────────────────
+  otlp:
+    endpoint: "centralized-collector:4317"
+    # If you want insecure connections (e.g., local dev), set insecure true
+    tls:
+      insecure: true
+    # Optional: use HTTP instead of gRPC
+    # http:
+    #   path: "/v1/logs"
+
+service:
+  pipelines:
+    logs:
+      receivers: [filelog, docker]
+      processors: [batch, resource]
+      exporters: [otlp]
