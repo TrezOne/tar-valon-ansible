@@ -103,7 +103,7 @@ outgoing:
   # default timeout in seconds, can be override by engine
   request_timeout: 3.0
   # the maximum timeout in seconds
-  # max_request_timeout: 10.0
+  max_request_timeout: 10.0
   # suffix of searxng_useragent, could contain information like an email address
   # to the administrator
   useragent_suffix: ""
@@ -153,7 +153,7 @@ plugins:
     active: true
 
   searx.plugins.infinite_scroll.SXNGPlugin:
-    active: false
+    active: true
 
   searx.plugins.hash_plugin.SXNGPlugin:
     active: true
