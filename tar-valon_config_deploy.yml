@@ -8,6 +8,7 @@
   gather_facts: false
   become: true
   become_method: sudo
+  strategy: mitogen_free
 
   vars:
     default_owner: "1000"
