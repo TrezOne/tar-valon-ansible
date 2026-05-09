@@ -1,6 +1,7 @@
 ---
 - name: Deploy Docker Service Configurations (Ownership-aware & verbose)
   hosts:
+    - aranea
     - lunafreya
     - rikku
     - rinoa

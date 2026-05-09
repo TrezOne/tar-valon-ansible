@@ -1,0 +1,2 @@
+appdata_base_path: /home/charish/.config/docker
+secrets_path: aranea-docker/env
