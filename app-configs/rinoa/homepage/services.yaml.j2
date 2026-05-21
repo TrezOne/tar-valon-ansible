@@ -20,6 +20,25 @@
 #        href: http://localhost/
 #        description: Homepage is 😎
 
+- System Administration:
+    - PatchMon
+        href: https://patch.trez.wtf
+        description: Patch management for *NIX and Windows
+        icon: patchmon.svg
+        weight: 0
+        widget:
+            type: customapi
+            url: http://192.168.1.252:3000/api/v1/gethomepage/stats
+            headers:
+                Authorization: Basic {{ lookup('community.hashi_vault.vault_kv2_get', 'env', engine_mount_point='rinoa-docker', url=vault_addr, token=vault_token)['secret']['PATCHMON_API_BASE64_CREDS'] }}
+            mappings:
+                - field: total_hosts
+                  label: Total Hosts
+                - field: hosts_needing_updates
+                  label: Needs Updates
+                - field: security_updates
+                  label: Security Updates
+
 - Automation:
     - Home Assistant (Rikku):
         href: https://ha.trez.wtf
