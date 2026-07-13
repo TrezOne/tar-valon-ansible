@@ -92,7 +92,7 @@ access_control:
   rules:
     - domain_regex:
       - '^trez.wtf$'
-      - ^www.trez.wtf$''
+      - ^www.trez.wtf$'
       policy: bypass
     - domain: '*.trez.wtf'
       policy: bypass
@@ -154,7 +154,7 @@ identity_providers:
     hmac_secret: "{{ vault.kv2_field('env', 'AUTHELIA_OIDC_HMAC_SECRET', vault_engine_mount_point) }}"
     jwks:
       - key: |
-          {{ vault.kv2_field('env', 'AUTHELIA_OIDC_JWKS_KEY', vault_engine_mount_point | replace("\\n", "\n") | indent(10) }}
+          {{ vault.kv2_field('env', 'AUTHELIA_OIDC_JWKS_KEY', vault_engine_mount_point) | replace("\\n", "\n") | indent(10) }}
     cors:
       allowed_origins_from_client_redirect_uris: true
       endpoints:
