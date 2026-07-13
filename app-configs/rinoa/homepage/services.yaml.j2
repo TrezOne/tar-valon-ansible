@@ -21,7 +21,7 @@
 #        description: Homepage is 😎
 
 - System Administration:
-    - PatchMon
+    - PatchMon:
         href: https://patch.trez.wtf
         description: Patch management for *NIX and Windows
         icon: patchmon.svg
@@ -30,7 +30,7 @@
             type: customapi
             url: http://192.168.1.252:3000/api/v1/gethomepage/stats
             headers:
-                Authorization: Basic \{\{ vault.kv2_field\('env', 'PATCHMON_API_BASE64_CREDS', vault_engine_mount_point) }}
+                Authorization: Basic {{ vault.kv2_field('env', 'PATCHMON_API_BASE64_CREDS', vault_engine_mount_point) }}
             mappings:
                 - field: total_hosts
                   label: Total Hosts
@@ -48,7 +48,7 @@
         widget:
             type: homeassistant
             url: http://192.168.1.252:8123
-            key: \{\{ vault.kv2_field\('env', 'HOMEPAGE_HOME_ASSISTANT_API_KEY', vault_engine_mount_point) }}
+            key: {{ vault.kv2_field('env', 'HOMEPAGE_HOME_ASSISTANT_API_KEY', vault_engine_mount_point) }}
 
 - Media Library:
     - Audiomuse:
