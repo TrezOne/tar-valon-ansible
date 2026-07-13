@@ -1,7 +1,7 @@
 {% import 'app-configs/_macros/hashivault_kv2.j2' as vault %}
 
 {
-    "api_key": "{{ vault.kv2_field\('env', 'HOME_ASSISTANT_LONG_LIVED_TOKEN', vault_engine_mount_point) }}",
+    "api_key": "{{ vault.kv2_field('env', 'HOME_ASSISTANT_LONG_LIVED_TOKEN', vault_engine_mount_point) }}",
     "host": "192.168.1.252:8123",
     "__mycroft_skill_firstrun": false
 }
