@@ -1,5 +1,5 @@
-{% set vault_addr = 'https://vault.trez.wtf' %}
-{% set secrets_path = 'rinoa-docker/env' %}
+{% import 'app-configs/_macros/hashivault_kv2.j2' as vault %}
+
 
 <Config>
   <BindAddress>*</BindAddress>
@@ -7,7 +7,7 @@
   <SslPort>6868</SslPort>
   <EnableSsl>False</EnableSsl>
   <LaunchBrowser>True</LaunchBrowser>
-  <ApiKey>{{ lookup('community.hashi_vault.vault_kv2_get', 'env', engine_mount_point='rinoa-docker', url=vault_addr, token=vault_token)['secret']['LIDARR_API_KEY'] }}</ApiKey>
+  <ApiKey>\{\{ vault.kv2_field\('env', 'LIDARR_API_KEY', vault_engine_mount_point) }}</ApiKey>
   <AuthenticationMethod>Forms</AuthenticationMethod>
   <Branch>master</Branch>
   <LogLevel>trace</LogLevel>

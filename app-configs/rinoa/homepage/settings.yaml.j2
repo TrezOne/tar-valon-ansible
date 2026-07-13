@@ -1,12 +1,12 @@
-{% set vault_addr = 'https://vault.trez.wtf' %}
-{% set secrets_path = 'rinoa-docker/env' %}
+{% import 'app-configs/_macros/hashivault_kv2.j2' as vault %}
+
 
 ---
 # For configuration options and examples, please see:
 # https://gethomepage.dev/en/configs/settings
 
 providers:
-  openweathermap: {{ lookup('community.hashi_vault.vault_kv2_get', 'env', engine_mount_point='rinoa-docker', url=vault_addr, token=vault_token)['secret']['HOMEPAGE_OPENWEATHERMAP_API_KEY'] }}
+  openweathermap: \{\{ vault.kv2_field\('env', 'HOMEPAGE_OPENWEATHERMAP_API_KEY', vault_engine_mount_point) }}
   # weatherapi: weatherapiapikey
 title: Rinoa Dashboard (trez.WTF)
 headerStyle: underlined
@@ -23,7 +23,7 @@ provider: duckduckgo
 layout:
   System Administration:
     style: row
-    columns: 5
+    columns: 4
   Infrastructure/App Performance Monitoring:
     style: row
     columns: 5

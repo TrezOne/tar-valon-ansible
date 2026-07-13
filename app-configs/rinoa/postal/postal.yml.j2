@@ -1,5 +1,5 @@
-{% set vault_addr = 'https://vault.trez.wtf' %}
-{% set secrets_path = 'rinoa-docker/env' %}
+{% import 'app-configs/_macros/hashivault_kv2.j2' as vault %}
+
 
 version: 2
 
@@ -18,13 +18,13 @@ web_server:
 main_db:
   host: mariadb
   username: postal
-  password: {{ lookup('community.hashi_vault.vault_kv2_get', 'env', engine_mount_point='rinoa-docker', url=vault_addr, token=vault_token)['secret']['POSTAL_MYSQL_PASSWORD'] }}
+  password: \{\{ vault.kv2_field\('env', 'POSTAL_MYSQL_PASSWORD', vault_engine_mount_point) }}
   database: postal
 
 message_db:
   host: mariadb
   username: postal
-  password: {{ lookup('community.hashi_vault.vault_kv2_get', 'env', engine_mount_point='rinoa-docker', url=vault_addr, token=vault_token)['secret']['POSTAL_MYSQL_PASSWORD'] }}
+  password: \{\{ vault.kv2_field\('env', 'POSTAL_MYSQL_PASSWORD', vault_engine_mount_point) }}
   prefix: postal
 
 smtp_server:
@@ -52,11 +52,11 @@ smtp:
   host: postal-smtp
   port: 25
   username: rinoa/postal-smtp
-  password: "{{ lookup('community.hashi_vault.vault_kv2_get', 'env', engine_mount_point='rinoa-docker', url=vault_addr, token=vault_token)['secret']['POSTAL_SMTP_AUTH_PASSWORD'] }}"
+  password: "\{\{ vault.kv2_field\('env', 'POSTAL_SMTP_AUTH_PASSWORD', vault_engine_mount_point) }}"
   from_name: Postal @ Rinoa
   from_address: noreply@trez.wtf
 
 rails:
   # This is generated automatically by the config initialization. It should be a random
   # string unique to your installation.
-  secret_key: "{{ lookup('community.hashi_vault.vault_kv2_get', 'env', engine_mount_point='rinoa-docker', url=vault_addr, token=vault_token)['secret']['POSTAL_RAILS_SECRET_KEY'] }}"
+  secret_key: "\{\{ vault.kv2_field\('env', 'POSTAL_RAILS_SECRET_KEY', vault_engine_mount_point) }}"

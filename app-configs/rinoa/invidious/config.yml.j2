@@ -1,5 +1,5 @@
-{% set vault_addr = 'https://vault.trez.wtf' %}
-{% set secrets_path = 'rinoa-docker/env' %}
+{% import 'app-configs/_macros/hashivault_kv2.j2' as vault %}
+
 #########################################
 #
 #  Database and other external servers
@@ -15,7 +15,7 @@ db:
   host: invidious-db
   port: 5432
   dbname: invidious
-  password: {{ lookup('community.hashi_vault.vault_kv2_get', 'env', engine_mount_point='rinoa-docker', url=vault_addr, token=vault_token)['secret']['INVID_PG_DB_PASSWORD'] }}
+  password: \{\{ vault.kv2_field\('env', 'INVID_PG_DB_PASSWORD', vault_engine_mount_point) }}
 
 ##
 ## Database configuration using a single URI. This is an
@@ -88,7 +88,7 @@ check_tables: true
 invidious_companion:
  - private_url: "http://invidious-companion:8282"
 #  # Uncomment for advanced reverse proxy configuration (see above).
- - public_url: https://invid.{{ lookup('community.hashi_vault.vault_kv2_get', 'env', engine_mount_point='rinoa-docker', url=vault_addr, token=vault_token)['secret']['MY_TLD'] }}/companion
+ - public_url: https://invid.\{\{ vault.kv2_field\('env', 'MY_TLD', vault_engine_mount_point) }}/companion
 
 ##
 ## API key for Invidious companion, used for securing the communication
@@ -103,7 +103,7 @@ invidious_companion:
 ## Accepted values: a string (of length 16)
 ## Default: <none>
 ##
-invidious_companion_key: {{ lookup('community.hashi_vault.vault_kv2_get', 'env', engine_mount_point='rinoa-docker', url=vault_addr, token=vault_token)['secret']['INVID_COMPANION_KEY'] }}
+invidious_companion_key: \{\{ vault.kv2_field\('env', 'INVID_COMPANION_KEY', vault_engine_mount_point) }}
 
 #########################################
 #
@@ -271,8 +271,8 @@ https_only: false
 ## Accepted values: String
 ## Default: <none>
 ##
-po_token: {{ lookup('community.hashi_vault.vault_kv2_get', 'env', engine_mount_point='rinoa-docker', url=vault_addr, token=vault_token)['secret']['INVID_PO_TOKEN'] }}
-visitor_data: {{ lookup('community.hashi_vault.vault_kv2_get', 'env', engine_mount_point='rinoa-docker', url=vault_addr, token=vault_token)['secret']['INVID_VISITOR_DATA'] }}
+po_token: \{\{ vault.kv2_field\('env', 'INVID_PO_TOKEN', vault_engine_mount_point) }}
+visitor_data: \{\{ vault.kv2_field\('env', 'INVID_VISITOR_DATA', vault_engine_mount_point) }}
 
 # -----------------------------
 #  Logging
@@ -532,7 +532,7 @@ jobs:
 ## Accepted values: a string
 ## Default: <none>
 ##
-hmac_key: {{ lookup('community.hashi_vault.vault_kv2_get', 'env', engine_mount_point='rinoa-docker', url=vault_addr, token=vault_token)['secret']['INVID_HMAC_KEY'] }}
+hmac_key: \{\{ vault.kv2_field\('env', 'INVID_HMAC_KEY', vault_engine_mount_point) }}
 
 ##
 ## List of video IDs where the "download" widget must be

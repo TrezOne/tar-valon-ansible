@@ -117,6 +117,9 @@
       loop_control:
         label: "{{ item }}"
 
+    - debug:
+      msg: "{{ lookup('community.hashi_vault.vault_kv2_get', 'env', engine_mount_point='rinoa-docker')['secret']['AUTHELIA_SESSION_SECRET'] }}"
+
     - name: Deploy template files
       ansible.builtin.template:
         src: "{{ item.src }}"

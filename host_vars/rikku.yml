@@ -1,2 +1,2 @@
 appdata_base_path: /home/pi/.config/docker
-secrets_path: rikku-docker/env
+vault_engine_mount_point: rikku-docker/env
