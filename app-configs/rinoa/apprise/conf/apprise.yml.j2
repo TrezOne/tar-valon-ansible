@@ -1,5 +1,5 @@
-{% set vault_addr = 'https://vault.trez.wtf' %}
-{% set secrets_path = 'rinoa-docker/env' %}
+{% import 'app-configs/_macros/hashivault_kv2.j2' as vault %}
+
 urls:
   - gotify://gotify/{{ vault.kv2_field('env','APPRISE_GOTIFY_TOKEN', vault_engine_mount_point) }}
   - hassio://192.168.1.252/{{ vault.kv2_field('env','APPRISE_HA_TOKEN', vault_engine_mount_point) }}

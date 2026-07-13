@@ -1,5 +1,5 @@
-{% set vault_addr = 'https://vault.trez.wtf' %}
-{% set secrets_path = 'rinoa-docker/env' %}
+{% import 'app-configs/_macros/hashivault_kv2.j2' as vault %}
+
 scheduler:
   cron: "45 23 * * *" # run every day at 6:00 and 18:00 UTC
   retention: 14 # Retains 14 local backups

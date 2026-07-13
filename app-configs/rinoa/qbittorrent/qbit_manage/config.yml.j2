@@ -1,5 +1,5 @@
-{% set vault_addr = 'https://vault.trez.wtf' %}
-{% set secrets_path = 'rinoa-docker/env' %}
+{% import 'app-configs/_macros/hashivault_kv2.j2' as vault %}
+
 # This is an example configuration file that documents all the options.
 # It will need to be modified for your specific use case.
 # These are not default values. You MUST review the config settings and properly configure this EXAMPLE file.

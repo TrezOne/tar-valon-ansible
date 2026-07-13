@@ -1,5 +1,5 @@
-{% set vault_addr = 'https://vault.trez.wtf' %}
-{% set secrets_path = 'rinoa-docker/env' %}
+{% import 'app-configs/_macros/hashivault_kv2.j2' as vault %}
+
 
 [Lidarr]
 api_key = {{ vault.kv2_field('env','LIDARR_API_KEY', vault_engine_mount_point) }}
