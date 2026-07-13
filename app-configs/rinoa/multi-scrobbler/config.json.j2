@@ -32,8 +32,8 @@
       "name": "lastfmSource",
       "clients": ["ListenBrainzClient", "malojaClient"],
       "data": {
-        "apiKey": "{{ lookup('community.hashi_vault.vault_kv2_get', 'env', engine_mount_point='rinoa-docker', url=vault_addr, token=vault_token)['secret']['LASTFM_API_KEY'] }}",
-        "secret": "{{ lookup('community.hashi_vault.vault_kv2_get', 'env', engine_mount_point='rinoa-docker', url=vault_addr, token=vault_token)['secret']['LASTFM_API_SECRET'] }}",
+        "apiKey": "{{ vault.kv2_field('env','LASTFM_API_KEY', vault_engine_mount_point) }}",
+        "secret": "{{ vault.kv2_field('env','LASTFM_API_SECRET', vault_engine_mount_point) }}",
         "redirectUri": "https://scrobble.trez.wtf/lastfm/callback"
       }
     },
@@ -43,7 +43,7 @@
       "name": "listenBrainzSource",
       "clients": ["lastFmClient", "malojaClient"],
       "data": {
-        "token": "{{ lookup('community.hashi_vault.vault_kv2_get', 'env', engine_mount_point='rinoa-docker', url=vault_addr, token=vault_token)['secret']['MALOJA_LISTENBRAINZ_TOKEN'] }}",
+        "token": "{{ vault.kv2_field('env','MALOJA_LISTENBRAINZ_TOKEN', vault_engine_mount_point) }}",
         "username": "Trez.One"
       }
     },
@@ -55,7 +55,7 @@
       "data": {
         "url": "http://navidrome:4533",
         "user": "admin",
-        "password": "{{ lookup('community.hashi_vault.vault_kv2_get', 'env', engine_mount_point='rinoa-docker', url=vault_addr, token=vault_token)['secret']['NAVIDROME_PASSWORD'] }}"
+        "password": "{{ vault.kv2_field('env','NAVIDROME_PASSWORD', vault_engine_mount_point) }}"
       }
     }
   ],
@@ -66,8 +66,8 @@
       "enabled": true,
       "name": "lastFmClient",
       "data": {
-        "apiKey": "{{ lookup('community.hashi_vault.vault_kv2_get', 'env', engine_mount_point='rinoa-docker', url=vault_addr, token=vault_token)['secret']['LASTFM_API_KEY'] }}",
-        "secret": "{{ lookup('community.hashi_vault.vault_kv2_get', 'env', engine_mount_point='rinoa-docker', url=vault_addr, token=vault_token)['secret']['LASTFM_API_SECRET'] }}",
+        "apiKey": "{{ vault.kv2_field('env','LASTFM_API_KEY', vault_engine_mount_point) }}",
+        "secret": "{{ vault.kv2_field('env','LASTFM_API_SECRET', vault_engine_mount_point) }}",
         "redirectUri": "https://scrobble.trez.wtf/lastfm/callback"
       }
     },
@@ -76,7 +76,7 @@
       "enabled": true,
       "name": "ListenBrainzClient",
       "data": {
-        "token": "{{ lookup('community.hashi_vault.vault_kv2_get', 'env', engine_mount_point='rinoa-docker', url=vault_addr, token=vault_token)['secret']['MALOJA_LISTENBRAINZ_TOKEN'] }}",
+        "token": "{{ vault.kv2_field('env','MALOJA_LISTENBRAINZ_TOKEN', vault_engine_mount_point) }}",
         "username": "Trez.One"
       }
     },
@@ -86,7 +86,7 @@
       "name": "malojaClient",
       "data": {
         "url": "http://maloja:42010",
-        "apiKey": "{{ lookup('community.hashi_vault.vault_kv2_get', 'env', engine_mount_point='rinoa-docker', url=vault_addr, token=vault_token)['secret']['MALOJA_API_KEY'] }}"
+        "apiKey": "{{ vault.kv2_field('env','MALOJA_API_KEY', vault_engine_mount_point) }}"
       }
     }
   ],
@@ -96,7 +96,7 @@
       "name": "Gotify",
       "type": "gotify",
       "url": "http://gotify",
-      "token": "{{ lookup('community.hashi_vault.vault_kv2_get', 'env', engine_mount_point='rinoa-docker', url=vault_addr, token=vault_token)['secret']['MULTI_SCROBBLER_GOTIFY_TOKEN'] }}",
+      "token": "{{ vault.kv2_field('env','MULTI_SCROBBLER_GOTIFY_TOKEN', vault_engine_mount_point) }}",
       "priorities": {
         "info": 5,
         "warn": 7,

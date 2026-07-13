@@ -16,8 +16,8 @@
                     endpoint should be https://storage.googleapis.com/<bucket-name>/data/
                 -->
             <endpoint>http://minio:9000/signoz/data</endpoint>
-            <access_key_id>{{ lookup('community.hashi_vault.vault_kv2_get', 'env', engine_mount_point='rinoa-docker', url=vault_addr, token=vault_token)['secret']['SIGNOZ_S3_ACCESS_KEY'] }}</access_key_id>
-            <secret_access_key>{{ lookup('community.hashi_vault.vault_kv2_get', 'env', engine_mount_point='rinoa-docker', url=vault_addr, token=vault_token)['secret']['SIGNOZ_S3_SECRET_KEY'] }}</secret_access_key>
+            <access_key_id>{{ vault.kv2_field('env','SIGNOZ_S3_ACCESS_KEY', vault_engine_mount_point) }}</access_key_id>
+            <secret_access_key>{{ vault.kv2_field('env','SIGNOZ_S3_SECRET_KEY', vault_engine_mount_point) }}</secret_access_key>
             <!-- In case of S3, uncomment the below configuration in case you want to read
                 AWS credentials from the Environment variables if they exist. -->
             <!-- <use_environment_credentials>true</use_environment_credentials> -->

@@ -1,0 +1,7 @@
+{% macro kv2_field(term, field, mount_point) -%}
+{{ lookup(
+     'community.hashi_vault.vault_kv2_get',
+     term,
+     engine_mount_point=mount_point
+  )['secret'][field] }}
+{%- endmacro %}

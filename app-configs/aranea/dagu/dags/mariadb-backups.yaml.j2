@@ -5,7 +5,7 @@ description: "Backup of all databases from MariaDB container"
 schedule: "30 23 * * *"
 
 env:
-  MARIADB_ROOT_PASSWORD: {{ lookup('community.hashi_vault.vault_kv2_get', 'env', engine_mount_point='rinoa-docker', url=vault_addr, token=vault_token)['secret']['MARIADB_ENVIRONMENT_MYSQL_ROOT_PASSWORD'] }}
+  MARIADB_ROOT_PASSWORD: {{ vault.kv2_field('env','MARIADB_ENVIRONMENT_MYSQL_ROOT_PASSWORD', vault_engine_mount_point) }}
 
 steps:
   - name: list-all-databases

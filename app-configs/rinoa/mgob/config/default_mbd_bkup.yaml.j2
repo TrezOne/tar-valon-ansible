@@ -5,7 +5,7 @@ scheduler:
   retention: 14 # Retains 14 local backups
   timeout: 60 # Operation timeout: 60 minutes
 target:
-  uri: mongodb://root:{{ lookup('community.hashi_vault.vault_kv2_get', 'env', engine_mount_point='rinoa-docker', url=vault_addr, token=vault_token)['secret']['MONGO_INITDB_ROOT_PASSWORD'] }}@mongodb:27017/admin?replicaSet=rinoa
+  uri: mongodb://root:{{ vault.kv2_field('env','MONGO_INITDB_ROOT_PASSWORD', vault_engine_mount_point) }}@mongodb:27017/admin?replicaSet=rinoa
   noGzip: false # Disable gzip compression (false means compression is enabled)
 
 retry:
@@ -23,8 +23,8 @@ validation:
 smtp:
   server: postal-stmp
   port: 25
-  username: {{ lookup('community.hashi_vault.vault_kv2_get', 'env', engine_mount_point='rinoa-docker', url=vault_addr, token=vault_token)['secret']['POSTAL_SMTP_AUTH_USER'] }}
-  password: {{ lookup('community.hashi_vault.vault_kv2_get', 'env', engine_mount_point='rinoa-docker', url=vault_addr, token=vault_token)['secret']['POSTAL_SMTP_AUTH_PASSWORD'] }}
+  username: {{ vault.kv2_field('env','POSTAL_SMTP_AUTH_USER', vault_engine_mount_point) }}
+  password: {{ vault.kv2_field('env','POSTAL_SMTP_AUTH_PASSWORD', vault_engine_mount_point) }}
   from: noreply@trez.wtf
   to:
     - charish.patel@trez.wtf
