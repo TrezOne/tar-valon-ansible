@@ -198,15 +198,15 @@ rooms:
 web:
   authentication:
     username: slskd
-    password: {{ vault.kv2_field('env','SLSKD_WEB_PASSSWORD', vault_engine_mount_point) }}
+    password: \{\{ vault.kv2_field\('env', 'SLSKD_WEB_PASSSWORD', vault_engine_mount_point) }}
     api_keys:
       my_api_key:
-        key: {{ vault.kv2_field('env','SLSKD_API_KEY', vault_engine_mount_point) }}
+        key: \{\{ vault.kv2_field\('env', 'SLSKD_API_KEY', vault_engine_mount_point) }}
         role: readwrite
         cidr: 0.0.0.0/0,::/0
 soulseek:
   address: vps.slsknet.org
   port: 2271
   username: Trez.One
-  password: {{ vault.kv2_field('env','SLSK_USER_PASSWORD', vault_engine_mount_point) }}
+  password: \{\{ vault.kv2_field\('env', 'SLSK_USER_PASSWORD', vault_engine_mount_point) }}
   diagnostic_level: Info

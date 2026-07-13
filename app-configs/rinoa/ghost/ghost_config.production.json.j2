@@ -9,7 +9,7 @@
       "host"     : "mariadb",
       "port"     : 3306,
       "user"     : "ghost",
-      "password" : "{{ vault.kv2_field('env','GHOST_DB_PASSWORD', vault_engine_mount_point) }}",
+      "password" : "\{\{ vault.kv2_field\('env', 'GHOST_DB_PASSWORD', vault_engine_mount_point) }}",
       "database" : "ghost_db"
     }
   },
@@ -21,8 +21,8 @@
       "port": 25,
       "secure": false,
       "auth": {
-        "user": "{{ vault.kv2_field('env','POSTAL_SMTP_AUTH_USER', vault_engine_mount_point) }}",
-        "pass": "{{ vault.kv2_field('env','POSTAL_SMTP_AUTH_PASSWORD', vault_engine_mount_point) }}"
+        "user": "\{\{ vault.kv2_field\('env', 'POSTAL_SMTP_AUTH_USER', vault_engine_mount_point) }}",
+        "pass": "\{\{ vault.kv2_field\('env', 'POSTAL_SMTP_AUTH_PASSWORD', vault_engine_mount_point) }}"
       }
     }
   },

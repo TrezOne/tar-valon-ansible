@@ -3,9 +3,9 @@
 
 {
     "radarr_address": "http://radarr:7878",
-    "radarr_api_key": "{{ vault.kv2_field('env','RADARR_API_KEY', vault_engine_mount_point) }}",
+    "radarr_api_key": "\{\{ vault.kv2_field\('env', 'RADARR_API_KEY', vault_engine_mount_point) }}",
     "root_folder_path": "/data/media/movies",
-    "tmdb_api_key": "{{ vault.kv2_field('env','TMDB_API_KEY', vault_engine_mount_point) }}",
+    "tmdb_api_key": "\{\{ vault.kv2_field\('env', 'TMDB_API_KEY', vault_engine_mount_point) }}",
     "fallback_to_top_result": false,
     "radarr_api_timeout": 120.0,
     "quality_profile_id": 1,

@@ -64,11 +64,11 @@ authentication_backend:
       mail: mail
       display_name: displayName
     user: uid=authelia,ou=people,dc=trez,dc=wtf
-    password: '{{ vault.kv2_field('env','AUTHELIA_AUTH_BIND_LDAP_PASSWORD', vault_engine_mount_point) }}'
+    password: '\{\{ vault.kv2_field\('env', 'AUTHELIA_AUTH_BIND_LDAP_PASSWORD', vault_engine_mount_point) }}'
   refresh_interval: 5m
 identity_validation:
   reset_password:
-    jwt_secret: '{{ vault.kv2_field('env','AUTHELIA_JWT_SECRET', vault_engine_mount_point) }}'
+    jwt_secret: '\{\{ vault.kv2_field\('env', 'AUTHELIA_JWT_SECRET', vault_engine_mount_point) }}'
 password_policy:
   standard:
     enabled: true
@@ -112,7 +112,7 @@ access_control:
       policy: bypass
 session:
   name: authelia_session
-  secret: '{{ vault.kv2_field('env','AUTHELIA_SESSION_SECRET', vault_engine_mount_point) }}'
+  secret: '\{\{ vault.kv2_field\('env', 'AUTHELIA_SESSION_SECRET', vault_engine_mount_point) }}'
   expiration: 1h
   inactivity: 5m
   remember_me: 1M
@@ -124,12 +124,12 @@ session:
     port: 6379
     database_index: 0
 storage:
-  encryption_key: '{{ vault.kv2_field('env','AUTHELIA_STORAGE_ENCRYPTION_KEY', vault_engine_mount_point) }}'
+  encryption_key: '\{\{ vault.kv2_field\('env', 'AUTHELIA_STORAGE_ENCRYPTION_KEY', vault_engine_mount_point) }}'
   postgres:
     address: 'tcp://authelia-pg:5432'
     database: authelia
     username: authelia
-    password: '{{ vault.kv2_field('env','AUTHELIA_STORAGE_POSTGRES_PASSWORD', vault_engine_mount_point) }}'
+    password: '\{\{ vault.kv2_field\('env', 'AUTHELIA_STORAGE_POSTGRES_PASSWORD', vault_engine_mount_point) }}'
     timeout: '5s'
 regulation:
   max_retries: 3
@@ -140,8 +140,8 @@ notifier:
   smtp:
     address: 'smtp://postal-smtp:25'
     timeout: '5s'
-    username: '{{ vault.kv2_field('env','POSTAL_SMTP_AUTH_USER', vault_engine_mount_point) }}'
-    password: '{{ vault.kv2_field('env','POSTAL_SMTP_AUTH_PASSWORD', vault_engine_mount_point) }}'
+    username: '\{\{ vault.kv2_field\('env', 'POSTAL_SMTP_AUTH_USER', vault_engine_mount_point) }}'
+    password: '\{\{ vault.kv2_field\('env', 'POSTAL_SMTP_AUTH_PASSWORD', vault_engine_mount_point) }}'
     sender: "Authelia <noreply@trez.wtf>"
     identifier: 'localhost'
     subject: "[Authelia] {title}"
@@ -151,7 +151,7 @@ notifier:
     disable_html_emails: false
 identity_providers:
   oidc:
-    hmac_secret: '{{ vault.kv2_field('env','AUTHELIA_OIDC_HMAC_SECRET', vault_engine_mount_point) }}'
+    hmac_secret: '\{\{ vault.kv2_field\('env', 'AUTHELIA_OIDC_HMAC_SECRET', vault_engine_mount_point) }}'
     jwks:
       - key: |
           {{ lookup("community.hashi_vault.vault_kv2_get", "env", engine_mount_point="rinoa-docker", url=vault_addr, token=vault_token)["secret"]["AUTHELIA_OIDC_JWKS_KEY"] | replace("\\n", "\n") | indent(10) }}
@@ -166,7 +166,7 @@ identity_providers:
     clients:
       - client_id: 'netbird'
         client_name: 'NetBird'
-        client_secret: '{{ vault.kv2_field('env','AUTHELIA_NETBIRD_CLIENT_SECRET', vault_engine_mount_point) }}'
+        client_secret: '\{\{ vault.kv2_field\('env', 'AUTHELIA_NETBIRD_CLIENT_SECRET', vault_engine_mount_point) }}'
         public: false
         authorization_policy: 'two_factor'
         redirect_uris:

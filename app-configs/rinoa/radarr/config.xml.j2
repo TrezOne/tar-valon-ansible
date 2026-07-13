@@ -8,7 +8,7 @@
   <SslCertPath></SslCertPath>
   <Port>7878</Port>
   <UrlBase></UrlBase>
-  <ApiKey>{{ vault.kv2_field('env','RADARR_API_KEY', vault_engine_mount_point) }}</ApiKey>
+  <ApiKey>\{\{ vault.kv2_field\('env', 'RADARR_API_KEY', vault_engine_mount_point) }}</ApiKey>
   <AuthenticationMethod>Forms</AuthenticationMethod>
   <UpdateMechanism>Docker</UpdateMechanism>
   <SslPort>9898</SslPort>

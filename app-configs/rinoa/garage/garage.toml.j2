@@ -9,7 +9,7 @@ compression_level = 10
 
 rpc_bind_addr = "[::]:3901"
 rpc_public_addr = "localhost:3901"
-rpc_secret = "{{ vault.kv2_field('env','GARAGE_RPC_SECRET', vault_engine_mount_point) }}"
+rpc_secret = "\{\{ vault.kv2_field\('env', 'GARAGE_RPC_SECRET', vault_engine_mount_point) }}"
 
 [s3_api]
 s3_region = "us-east-fh-pln"
@@ -22,5 +22,5 @@ root_domain = ".garage.trez.wtf"
 
 [admin]
 api_bind_addr = "[::]:3903"
-admin_token = "{{ vault.kv2_field('env','GARAGE_ADMIN_TOKEN', vault_engine_mount_point) }}"
-metrics_token = "{{ vault.kv2_field('env','GARAGE_METRICS_TOKEN', vault_engine_mount_point) }}"
+admin_token = "\{\{ vault.kv2_field\('env', 'GARAGE_ADMIN_TOKEN', vault_engine_mount_point) }}"
+metrics_token = "\{\{ vault.kv2_field\('env', 'GARAGE_METRICS_TOKEN', vault_engine_mount_point) }}"

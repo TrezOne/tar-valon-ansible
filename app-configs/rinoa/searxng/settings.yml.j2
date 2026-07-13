@@ -51,7 +51,7 @@ server:
   limiter: false
   public_instance: false
 
-  secret_key: {{ vault.kv2_field('env','SEARXNG_SECRET_KEY', vault_engine_mount_point) }}  # Is overwritten by ${SEARXNG_SECRET}
+  secret_key: \{\{ vault.kv2_field\('env', 'SEARXNG_SECRET_KEY', vault_engine_mount_point) }}  # Is overwritten by ${SEARXNG_SECRET}
   image_proxy: true
   http_protocol_version: "1.0"
   method: "POST"

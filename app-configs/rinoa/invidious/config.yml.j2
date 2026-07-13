@@ -15,7 +15,7 @@ db:
   host: invidious-db
   port: 5432
   dbname: invidious
-  password: {{ vault.kv2_field('env','INVID_PG_DB_PASSWORD', vault_engine_mount_point) }}
+  password: \{\{ vault.kv2_field\('env', 'INVID_PG_DB_PASSWORD', vault_engine_mount_point) }}
 
 ##
 ## Database configuration using a single URI. This is an
@@ -88,7 +88,7 @@ check_tables: true
 invidious_companion:
  - private_url: "http://invidious-companion:8282"
 #  # Uncomment for advanced reverse proxy configuration (see above).
- - public_url: https://invid.{{ vault.kv2_field('env','MY_TLD', vault_engine_mount_point) }}/companion
+ - public_url: https://invid.\{\{ vault.kv2_field\('env', 'MY_TLD', vault_engine_mount_point) }}/companion
 
 ##
 ## API key for Invidious companion, used for securing the communication
@@ -103,7 +103,7 @@ invidious_companion:
 ## Accepted values: a string (of length 16)
 ## Default: <none>
 ##
-invidious_companion_key: {{ vault.kv2_field('env','INVID_COMPANION_KEY', vault_engine_mount_point) }}
+invidious_companion_key: \{\{ vault.kv2_field\('env', 'INVID_COMPANION_KEY', vault_engine_mount_point) }}
 
 #########################################
 #
@@ -271,8 +271,8 @@ https_only: false
 ## Accepted values: String
 ## Default: <none>
 ##
-po_token: {{ vault.kv2_field('env','INVID_PO_TOKEN', vault_engine_mount_point) }}
-visitor_data: {{ vault.kv2_field('env','INVID_VISITOR_DATA', vault_engine_mount_point) }}
+po_token: \{\{ vault.kv2_field\('env', 'INVID_PO_TOKEN', vault_engine_mount_point) }}
+visitor_data: \{\{ vault.kv2_field\('env', 'INVID_VISITOR_DATA', vault_engine_mount_point) }}
 
 # -----------------------------
 #  Logging
@@ -532,7 +532,7 @@ jobs:
 ## Accepted values: a string
 ## Default: <none>
 ##
-hmac_key: {{ vault.kv2_field('env','INVID_HMAC_KEY', vault_engine_mount_point) }}
+hmac_key: \{\{ vault.kv2_field\('env', 'INVID_HMAC_KEY', vault_engine_mount_point) }}
 
 ##
 ## List of video IDs where the "download" widget must be

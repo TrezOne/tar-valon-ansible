@@ -9,7 +9,7 @@ http:
   session_ttl: 720h
 users:
   - name: admin
-    password: {{ vault.kv2_field('env','ADGUARD_BCRYPT', vault_engine_mount_point) }}
+    password: \{\{ vault.kv2_field\('env', 'ADGUARD_BCRYPT', vault_engine_mount_point) }}
 auth_attempts: 5
 block_auth_min: 15
 http_proxy: ""

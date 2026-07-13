@@ -7,7 +7,7 @@
   <SslPort>6969</SslPort>
   <EnableSsl>False</EnableSsl>
   <LaunchBrowser>True</LaunchBrowser>
-  <ApiKey>{{ vault.kv2_field('env','PROWLARR_API_KEY', vault_engine_mount_point) }}</ApiKey>
+  <ApiKey>\{\{ vault.kv2_field\('env', 'PROWLARR_API_KEY', vault_engine_mount_point) }}</ApiKey>
   <AuthenticationMethod>Forms</AuthenticationMethod>
   <AuthenticationRequired>Enabled</AuthenticationRequired>
   <Branch>master</Branch>

@@ -44,7 +44,7 @@ global_keywords:
     - fatal
 notifications:
   apprise:
-    url: gotify://gotify/{{ vault.kv2_field('env','APPRISE_GOTIFY_TOKEN', vault_engine_mount_point) }}    # Any Apprise-compatible URL (https://github.com/caronc/apprise/wiki)
+    url: gotify://gotify/\{\{ vault.kv2_field\('env', 'APPRISE_GOTIFY_TOKEN', vault_engine_mount_point) }}    # Any Apprise-compatible URL (https://github.com/caronc/apprise/wiki)
 # settings are optional because they all have default values
 settings:
   log_level: INFO               # DEBUG, INFO, WARNING, ERROR

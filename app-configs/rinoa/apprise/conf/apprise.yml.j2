@@ -1,6 +1,6 @@
 {% import 'app-configs/_macros/hashivault_kv2.j2' as vault %}
 
 urls:
-  - gotify://gotify/{{ vault.kv2_field('env','APPRISE_GOTIFY_TOKEN', vault_engine_mount_point) }}
-  - hassio://192.168.1.252/{{ vault.kv2_field('env','APPRISE_HA_TOKEN', vault_engine_mount_point) }}
-  - mailto://postal-smtp:{{ vault.kv2_field('env','POSTAL_SMTP_AUTH_PASSWORD', vault_engine_mount_point) }}@postal-smtp:25?from=noreply@trez.wtf
+  - gotify://gotify/\{\{ vault.kv2_field\('env', 'APPRISE_GOTIFY_TOKEN', vault_engine_mount_point) }}
+  - hassio://192.168.1.252/\{\{ vault.kv2_field\('env', 'APPRISE_HA_TOKEN', vault_engine_mount_point) }}
+  - mailto://postal-smtp:\{\{ vault.kv2_field\('env', 'POSTAL_SMTP_AUTH_PASSWORD', vault_engine_mount_point) }}@postal-smtp:25?from=noreply@trez.wtf

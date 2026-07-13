@@ -7,7 +7,7 @@
   <SslPort>6868</SslPort>
   <EnableSsl>False</EnableSsl>
   <LaunchBrowser>True</LaunchBrowser>
-  <ApiKey>{{ vault.kv2_field('env','LIDARR_API_KEY', vault_engine_mount_point) }}</ApiKey>
+  <ApiKey>\{\{ vault.kv2_field\('env', 'LIDARR_API_KEY', vault_engine_mount_point) }}</ApiKey>
   <AuthenticationMethod>Forms</AuthenticationMethod>
   <Branch>master</Branch>
   <LogLevel>trace</LogLevel>

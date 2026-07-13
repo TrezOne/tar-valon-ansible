@@ -27,7 +27,7 @@ DISABLE_SSH = false
 SSH_PORT = 22
 SSH_LISTEN_PORT = 22
 LFS_START_SERVER = true
-LFS_JWT_SECRET = {{ vault.kv2_field('env','GITEA_LFS_JWT_SECRET', vault_engine_mount_point) }}
+LFS_JWT_SECRET = \{\{ vault.kv2_field\('env', 'GITEA_LFS_JWT_SECRET', vault_engine_mount_point) }}
 OFFLINE_MODE = true
 
 [database]
@@ -36,7 +36,7 @@ DB_TYPE = postgres
 HOST = gitea-db:5432
 NAME = gitea
 USER = gitea
-PASSWD = {{ vault.kv2_field('env','GITEA_PG_DB_PASSWORD', vault_engine_mount_point) }}
+PASSWD = \{\{ vault.kv2_field\('env', 'GITEA_PG_DB_PASSWORD', vault_engine_mount_point) }}
 LOG_SQL = false
 SCHEMA =
 SSL_MODE = disable
@@ -70,7 +70,7 @@ INSTALL_LOCK = true
 SECRET_KEY =
 REVERSE_PROXY_LIMIT = 1
 REVERSE_PROXY_TRUSTED_PROXIES = *
-INTERNAL_TOKEN = {{ vault.kv2_field('env','GITEA_INTERNAL_TOKEN', vault_engine_mount_point) }}
+INTERNAL_TOKEN = \{\{ vault.kv2_field\('env', 'GITEA_INTERNAL_TOKEN', vault_engine_mount_point) }}
 PASSWORD_HASH_ALGO = pbkdf2
 
 [service]
@@ -89,7 +89,7 @@ NO_REPLY_ADDRESS = noreply@trez.wtf
 PATH = /data/git/lfs
 
 [mailer]
-PASSWD = {{ vault.kv2_field('env','POSTAL_SMTP_AUTH_PASSWORD', vault_engine_mount_point) }}
+PASSWD = \{\{ vault.kv2_field\('env', 'POSTAL_SMTP_AUTH_PASSWORD', vault_engine_mount_point) }}
 PROTOCOL = smtp
 ENABLED = true
 FROM = '"Gitea" <noreply@trez.wtf>'
@@ -112,7 +112,7 @@ DEFAULT_MERGE_STYLE = merge
 DEFAULT_TRUST_MODEL = committer
 
 [oauth2]
-JWT_SECRET = {{ vault.kv2_field('env','GITEA_OAUTH2_JWT_SECRET', vault_engine_mount_point) }}
+JWT_SECRET = \{\{ vault.kv2_field\('env', 'GITEA_OAUTH2_JWT_SECRET', vault_engine_mount_point) }}
 
 [ui]
 THEMES = gitea-auto,catppuccin-blue-auto,catppuccin-flamingo-auto,catppuccin-green-auto,catppuccin-lavender-auto,catppuccin-mauve-auto,catppuccin-peach-auto,catppuccin-pink-auto,catppuccin-red-auto,catppuccin-rosewater-auto,catppuccin-sapphire-auto,catppuccin-sky-auto,catppuccin-teal-auto,catppuccin-yellow-auto,catppuccin-maroon-auto

@@ -5,7 +5,7 @@ scheduler:
   retention: 14 # Retains 14 local backups
   timeout: 60 # Operation timeout: 60 minutes
 target:
-  uri: mongodb://root:{{ vault.kv2_field('env','MONGO_INITDB_ROOT_PASSWORD', vault_engine_mount_point) }}@mongodb:27017/admin?replicaSet=rinoa
+  uri: mongodb://root:\{\{ vault.kv2_field\('env', 'MONGO_INITDB_ROOT_PASSWORD', vault_engine_mount_point) }}@mongodb:27017/admin?replicaSet=rinoa
   noGzip: false # Disable gzip compression (false means compression is enabled)
 
 retry:
@@ -23,8 +23,8 @@ validation:
 smtp:
   server: postal-stmp
   port: 25
-  username: {{ vault.kv2_field('env','POSTAL_SMTP_AUTH_USER', vault_engine_mount_point) }}
-  password: {{ vault.kv2_field('env','POSTAL_SMTP_AUTH_PASSWORD', vault_engine_mount_point) }}
+  username: \{\{ vault.kv2_field\('env', 'POSTAL_SMTP_AUTH_USER', vault_engine_mount_point) }}
+  password: \{\{ vault.kv2_field\('env', 'POSTAL_SMTP_AUTH_PASSWORD', vault_engine_mount_point) }}
   from: noreply@trez.wtf
   to:
     - charish.patel@trez.wtf

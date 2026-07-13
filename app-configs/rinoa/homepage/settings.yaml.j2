@@ -6,7 +6,7 @@
 # https://gethomepage.dev/en/configs/settings
 
 providers:
-  openweathermap: {{ vault.kv2_field('env','HOMEPAGE_OPENWEATHERMAP_API_KEY', vault_engine_mount_point) }}
+  openweathermap: \{\{ vault.kv2_field\('env', 'HOMEPAGE_OPENWEATHERMAP_API_KEY', vault_engine_mount_point) }}
   # weatherapi: weatherapiapikey
 title: Rinoa Dashboard (trez.WTF)
 headerStyle: underlined
